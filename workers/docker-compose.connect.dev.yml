@@ -1,0 +1,10 @@
+version: '3.5'
+
+services:
+  connect:
+    container_name: connect
+    restart: on-failure:3
+    ports:
+      - '1${CN_PORT}:${CN_PORT}'
+    environment:
+      CONNECT_HEAP_OPTS: '-Xmx256m -Xms256m'

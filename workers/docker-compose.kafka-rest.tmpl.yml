@@ -1,0 +1,27 @@
+version: '3.5'
+
+services:
+  kafka-rest:
+    image: confluentinc/cp-kafka-rest:${IMAGE_TAG:-latest}
+    hostname: kafka-rest
+    networks:
+      - kafka-net
+    environment:
+      KAFKA_REST_ZOOKEEPER_CONNECT: zk-1:${ZK_PORT},zk-2:${ZK_PORT},zk-3:${ZK_PORT}
+      KAFKA_REST_BOOTSTRAP_SERVERS: kf-1:${KF_PORT},kf-2:${KF_PORT},kf-3:${KF_PORT}
+      KAFKA_REST_LISTENERS: 'http://0.0.0.0:${KR_PORT}'
+      KAFKA_REST_SCHEMA_REGISTRY_URL: http://schema-registry:${SR_PORT}
+      KAFKA_REST_HOST_NAME: ${PUBLIC_HOSTNAME}
+      KAFKA_REST_ACCESS_CONTROL_ALLOW_METHODS: GET,POST,PUT,DELETE,OPTIONS
+      KAFKA_REST_ACCESS_CONTROL_ALLOW_ORIGIN: '*'
+      KAFKA_REST_CONSUMER_REQUEST_TIMEOUT_MS: '30000'
+    healthcheck:
+      test: curl -X GET http://localhost:${KR_PORT}/topics
+      interval: 30s
+      timeout: 30s
+      retries: 3
+      start_period: 2m
+
+networks:
+  kafka-net:
+    external: true

@@ -1,0 +1,21 @@
+version: '3.5'
+
+services:
+  kafka-manager:
+    image: redmic/kafka-manager:${IMAGE_TAG:-latest}
+    hostname: kafka-manager
+    networks:
+      - kafka-net
+    environment:
+      ZK_HOSTS: zk-1:${ZK_PORT},zk-2:${ZK_PORT},zk-3:${ZK_PORT}
+      KM_ARGS: '-Djava.net.preferIPv4Stack=true'
+    healthcheck:
+      test: wget --spider -S -t 3 http://localhost:${KM_PORT}
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 2m
+
+networks:
+  kafka-net:
+    external: true

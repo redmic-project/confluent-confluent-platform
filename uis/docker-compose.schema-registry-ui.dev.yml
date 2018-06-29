@@ -1,0 +1,8 @@
+version: '3.5'
+
+services:
+  schema-registry-ui:
+    container_name: schema-registry-ui
+    restart: on-failure:3
+    ports:
+      - '18000:${UI_PORT}'

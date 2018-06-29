@@ -1,0 +1,8 @@
+version: '3.5'
+
+services:
+  kafka-manager:
+    container_name: kafka-manager
+    restart: on-failure:3
+    ports:
+      - '18003:${KM_PORT}'

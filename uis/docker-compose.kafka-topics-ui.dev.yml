@@ -1,0 +1,8 @@
+version: '3.5'
+
+services:
+  kafka-topics-ui:
+    container_name: kafka-topics-ui
+    restart: on-failure:3
+    ports:
+      - '18001:${UI_PORT}'

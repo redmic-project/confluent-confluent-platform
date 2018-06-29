@@ -1,0 +1,43 @@
+version: '3.5'
+
+services:
+  connect:
+    image: confluentinc/cp-kafka-connect:${IMAGE_TAG:-latest}
+    hostname: connect
+    networks:
+      - kafka-net
+      - postgres-net
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      CONNECT_HOST: connect
+      CONNECT_ZOOKEEPER_CONNECT: zk-1:${ZK_PORT},zk-2:${ZK_PORT},zk-3:${ZK_PORT}
+      CONNECT_BOOTSTRAP_SERVERS: kf-1:${KF_PORT},kf-2:${KF_PORT},kf-3:${KF_PORT}
+      CONNECT_REST_PORT: ${CN_PORT}
+      CONNECT_REST_ADVERTISED_HOST_NAME: connect
+      CONNECT_GROUP_ID: 'connect-group'
+      CONNECT_CONFIG_STORAGE_TOPIC: 'connect-config'
+      CONNECT_OFFSET_STORAGE_TOPIC: 'connect-offset'
+      CONNECT_STATUS_STORAGE_TOPIC: 'connect-status'
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 2
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 2
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 2
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:${SR_PORT}'
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:${SR_PORT}'
+      CONNECT_KEY_CONVERTER: 'org.apache.kafka.connect.storage.StringConverter'
+      CONNECT_VALUE_CONVERTER: 'io.confluent.connect.avro.AvroConverter'
+      CONNECT_INTERNAL_KEY_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
+      CONNECT_INTERNAL_VALUE_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
+      CONNECT_PLUGIN_PATH: /usr/share/java
+    healthcheck:
+      test: curl -X GET http://localhost:${CN_PORT}/connectors
+      interval: 30s
+      timeout: 30s
+      retries: 3
+      start_period: 2m
+
+networks:
+  kafka-net:
+    external: true
+  postgres-net:
+    external: true

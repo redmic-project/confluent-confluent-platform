@@ -1,0 +1,10 @@
+version: '3.5'
+
+services:
+  kafka-rest:
+    container_name: kafka-rest
+    restart: on-failure:3
+    ports:
+      - '1${KR_PORT}:${KR_PORT}'
+    environment:
+      KAFKA_REST_HEAP_OPTS: '-Xmx256m -Xms256m'

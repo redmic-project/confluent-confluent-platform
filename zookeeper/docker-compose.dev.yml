@@ -1,0 +1,40 @@
+version: '3.5'
+
+services:
+  zk-1:
+    container_name: zk-1
+    restart: on-failure:3
+    ports:
+      - 9990:9990
+    environment:
+      ZOOKEEPER_HEAP_OPTS: '-Xmx256m -Xms256m'
+
+  zk-2:
+    container_name: zk-2
+    restart: on-failure:3
+    ports:
+      - 9991:9991
+    environment:
+      ZOOKEEPER_HEAP_OPTS: '-Xmx256m -Xms256m'
+
+  zk-3:
+    container_name: zk-3
+    restart: on-failure:3
+    ports:
+      - 9992:9992
+    environment:
+      ZOOKEEPER_HEAP_OPTS: '-Xmx256m -Xms256m'
+
+volumes:
+  zk-1-data-vol:
+    name: zk-1-data-vol
+  zk-1-log-vol:
+    name: zk-1-log-vol
+  zk-2-data-vol:
+    name: zk-2-data-vol
+  zk-2-log-vol:
+    name: zk-2-log-vol
+  zk-3-data-vol:
+    name: zk-3-data-vol
+  zk-3-log-vol:
+    name: zk-3-log-vol

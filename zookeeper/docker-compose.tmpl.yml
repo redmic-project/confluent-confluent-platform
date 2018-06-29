@@ -1,0 +1,81 @@
+version: '3.5'
+
+services:
+  zk-1:
+    image: confluentinc/cp-zookeeper:${IMAGE_TAG:-latest}
+    hostname: zk-1
+    networks:
+      - kafka-net
+    volumes:
+      - zk-1-data-vol:/var/lib/zookeeper/data
+      - zk-1-log-vol:/var/lib/zookeeper/log
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: ${ZK_PORT}
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_AUTOPURGE_SNAP_RETAIN_COUNT: 3
+      ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL: 24
+      ZOOKEEPER_SERVERS: zk-1:2888:3888;zk-2:2888:3888;zk-3:2888:3888
+      KAFKA_JMX_PORT: 9990
+    healthcheck:
+      test: echo ruok | nc localhost ${ZK_PORT}
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 2m
+
+  zk-2:
+    image: confluentinc/cp-zookeeper:${IMAGE_TAG:-latest}
+    hostname: zk-2
+    networks:
+      - kafka-net
+    volumes:
+      - zk-2-data-vol:/var/lib/zookeeper/data
+      - zk-2-log-vol:/var/lib/zookeeper/log
+    environment:
+      ZOOKEEPER_SERVER_ID: 2
+      ZOOKEEPER_CLIENT_PORT: ${ZK_PORT}
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_AUTOPURGE_SNAP_RETAIN_COUNT: 3
+      ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL: 24
+      ZOOKEEPER_SERVERS: zk-1:2888:3888;zk-2:2888:3888;zk-3:2888:3888
+      KAFKA_JMX_PORT: 9991
+    healthcheck:
+      test: echo ruok | nc localhost ${ZK_PORT}
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 2m
+
+  zk-3:
+    image: confluentinc/cp-zookeeper:${IMAGE_TAG:-latest}
+    hostname: zk-3
+    networks:
+      - kafka-net
+    volumes:
+      - zk-3-data-vol:/var/lib/zookeeper/data
+      - zk-3-log-vol:/var/lib/zookeeper/log
+    environment:
+      ZOOKEEPER_SERVER_ID: 3
+      ZOOKEEPER_CLIENT_PORT: ${ZK_PORT}
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_AUTOPURGE_SNAP_RETAIN_COUNT: 3
+      ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL: 24
+      ZOOKEEPER_SERVERS: zk-1:2888:3888;zk-2:2888:3888;zk-3:2888:3888
+      KAFKA_JMX_PORT: 9992
+    healthcheck:
+      test: echo ruok | nc localhost ${ZK_PORT}
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 2m
+
+networks:
+  kafka-net:
+    external: true

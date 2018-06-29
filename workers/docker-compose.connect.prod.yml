@@ -1,0 +1,17 @@
+version: '3.5'
+
+services:
+  connect:
+    ports:
+      - ${CN_PORT}
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == worker
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    environment:
+      CONNECT_HEAP_OPTS: '-Xmx1g -Xms1g'

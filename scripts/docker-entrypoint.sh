@@ -1,0 +1,30 @@
+#!/bin/bash
+
+if [[ "${#}" -lt 1 ]]; then
+	echo "You must provide at least one Confluent-Connect node address (hostname:port)"
+	exit 1
+fi
+
+done=false
+addrs="${*}"
+
+while [[ "${done}" = false ]]; do
+	for addr in ${addrs}; do
+		echo "Trying to connect to host: ${addr}"
+		curl -q "http://${addr}/connectors" >& /dev/null
+
+		if [[ "${?}" -eq 0 ]]; then
+			done=true
+
+			echo "Connected, creating connectors at host: ${addr}"
+
+			curl -s -X POST -H "Content-Type: application/json" --data \
+				"{\"name\": \"jdbc-sink\", \"config\": {\"name\":\"jdbc-sink\", \"connector.class\":\"io.confluent.connect.jdbc.JdbcSinkConnector\", \"tasks.max\":\"1\", \"topics\":\"realtime.tracking.vessels\", \"connection.url\": \"jdbc:postgresql://postgres:5432/redmic?currentSchema=ais\", \"connection.password\": \"${POSTGRES_PASS}\", \"connection.user\": \"${POSTGRES_USER}\", \"table.name.format\": \"tracking\", \"auto.evolve\": \"true\", \"insert.mode\": \"upsert\", \"pk.mode\": \"record_value\", \"pk.fields\": \"mmsi\"}}" \
+				"http://${addr}/connectors" >& /dev/null
+
+			break
+		fi
+
+		sleep 5
+	done
+done

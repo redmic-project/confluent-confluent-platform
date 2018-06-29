@@ -1,0 +1,10 @@
+version: '3.5'
+
+services:
+  schema-registry:
+    container_name: schema-registry
+    restart: on-failure:3
+    ports:
+      - '1${SR_PORT}:${SR_PORT}'
+    environment:
+      SCHEMA_REGISTRY_HEAP_OPTS: '-Xmx256m -Xms256m'

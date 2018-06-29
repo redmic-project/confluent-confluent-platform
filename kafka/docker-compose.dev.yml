@@ -1,0 +1,40 @@
+version: '3.5'
+
+services:
+  kf-1:
+    container_name: kf-1
+    restart: on-failure:3
+    ports:
+      - 1${KF_PORT}:${KF_PORT}
+      - 9997:9997
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${PUBLIC_HOSTNAME}:1${KF_PORT}
+      KAFKA_HEAP_OPTS: '-Xmx256m -Xms256m'
+
+  kf-2:
+    container_name: kf-2
+    restart: on-failure:3
+    ports:
+      - 2${KF_PORT}:${KF_PORT}
+      - 9998:9998
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${PUBLIC_HOSTNAME}:2${KF_PORT}
+      KAFKA_HEAP_OPTS: '-Xmx256m -Xms256m'
+
+  kf-3:
+    container_name: kf-3
+    restart: on-failure:3
+    ports:
+      - 3${KF_PORT}:${KF_PORT}
+      - 9999:9999
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${PUBLIC_HOSTNAME}:3${KF_PORT}
+      KAFKA_HEAP_OPTS: '-Xmx256m -Xms256m'
+
+volumes:
+  kf-1-data-vol:
+    name: kf-1-data-vol
+  kf-2-data-vol:
+    name: kf-2-data-vol
+  kf-3-data-vol:
+    name: kf-3-data-vol

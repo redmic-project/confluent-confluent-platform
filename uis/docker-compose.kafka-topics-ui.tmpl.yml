@@ -1,0 +1,23 @@
+version: '3.5'
+
+services:
+  kafka-topics-ui:
+    image: landoop/kafka-topics-ui:${IMAGE_TAG:-latest}
+    hostname: kafka-topics-ui
+    networks:
+      - kafka-net
+    environment:
+      KAFKA_REST_PROXY_URL: http://kafka-rest:${KR_PORT}
+      PROXY: 'true'
+      MAX_BYTES: '50000'
+      RECORD_POLL_TIMEOUT: '30000'
+    healthcheck:
+      test: wget --spider -S -t 3 http://localhost:${UI_PORT}
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 2m
+
+networks:
+  kafka-net:
+    external: true
