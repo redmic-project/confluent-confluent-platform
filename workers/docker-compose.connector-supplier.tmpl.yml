@@ -6,7 +6,7 @@ services:
     networks:
       - kafka-net
     environment:
-      - CONNECT_ADDRS: "connect:${CN_PORT}"
+      - CONNECT_ADDRS=connect:${CN_PORT}
       - POSTGRES_USER
       - POSTGRES_PASS
 
