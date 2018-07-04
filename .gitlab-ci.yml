@@ -213,7 +213,7 @@ deploy-connector-supplier-dev:
     DOCKER_DRIVER: overlay2
     SSH_REMOTE: ${DEV_SSH_REMOTE}
     SERVICE: connector-supplier
-    IMAGE_NAME: ${DOCKER_ENV_CI_REGISTRY_IMAGE}
+    IMAGE_NAME: ${CI_REGISTRY_IMAGE}/connector-supplier
     IMAGE_TAG: ${CI_COMMIT_SHA}
     COMPOSE_FILE: docker-compose.${SERVICE}.tmpl.yml:docker-compose.${SERVICE}.dev.yml
     CONNECT_ADDRS: connect:8083
@@ -237,7 +237,7 @@ deploy-connector-supplier-pro:
     DOCKER_DRIVER: overlay2
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     SERVICE: connector-supplier
-    IMAGE_NAME: ${DOCKER_ENV_CI_REGISTRY_IMAGE}
+    IMAGE_NAME: ${CI_REGISTRY_IMAGE}/connector-supplier
     IMAGE_TAG: ${CI_COMMIT_SHA}
     COMPOSE_FILE: docker-compose.${SERVICE}.tmpl.yml:docker-compose.${SERVICE}.prod.yml
     CONNECT_ADDRS: connect:8083
