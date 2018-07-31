@@ -6,7 +6,7 @@ stages:
   - deploy
 
 variables:
-  CONFLUENT_VERSION: 4.0.0
+  CONFLUENT_VERSION: 5.0.0
 
 docker-build-dev:
   stage: package
