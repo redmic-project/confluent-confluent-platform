@@ -7,4 +7,4 @@ services:
     ports:
       - '1${SR_PORT}:${SR_PORT}'
     environment:
-      SCHEMA_REGISTRY_HEAP_OPTS: '-Xmx256m -Xms256m'
+      - SCHEMA_REGISTRY_HEAP_OPTS=-Xmx256m -Xms256m
