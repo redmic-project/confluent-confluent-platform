@@ -99,17 +99,14 @@ deploy-zookeeper-pro:
     DOCKER_DRIVER: overlay2
     DEPLOY_DIR_NAME: zookeeper
     SSH_REMOTE: ${PRO_SSH_REMOTE}
+    SERVICE: zookeeper
+    SERVICES_TO_CHECK: zk-1 zk-2 zk-3
     IMAGE_TAG: ${CONFLUENT_VERSION}
     COMPOSE_FILE: docker-compose.tmpl.yml:docker-compose.prod.yml
   services:
     - docker:dind
   script:
     - create-nets.sh kafka-net
-    - export SERVICE=zk-1
-    - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
-    - export SERVICE=zk-2
-    - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
-    - export SERVICE=zk-3
     - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
   environment:
     name: pro/zookeeper
@@ -149,16 +146,13 @@ deploy-kafka-pro:
     DOCKER_DRIVER: overlay2
     DEPLOY_DIR_NAME: kafka
     SSH_REMOTE: ${PRO_SSH_REMOTE}
+    SERVICE: kafka
+    SERVICES_TO_CHECK: kf-1 kf-2 kf-3
     IMAGE_TAG: ${CONFLUENT_VERSION}
     COMPOSE_FILE: docker-compose.tmpl.yml:docker-compose.prod.yml
   services:
     - docker:dind
   script:
-    - export SERVICE=kf-1
-    - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
-    - export SERVICE=kf-2
-    - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
-    - export SERVICE=kf-3
     - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
   environment:
     name: pro/kafka
