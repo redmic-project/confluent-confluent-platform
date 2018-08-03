@@ -72,9 +72,8 @@ volumes:
     driver: "cloudstor:aws"
     driver_opts:
       backing: relocatable
-      size: 4
-      ebstype: io1
-      iops: 100
+      size: 1
+      ebstype: gp2
 
   zk-2-data-vol:
     name: zk-2-data-vol
@@ -89,9 +88,8 @@ volumes:
     driver: "cloudstor:aws"
     driver_opts:
       backing: relocatable
-      size: 4
-      ebstype: io1
-      iops: 100
+      size: 1
+      ebstype: gp2
 
   zk-3-data-vol:
     name: zk-3-data-vol
@@ -106,6 +104,5 @@ volumes:
     driver: "cloudstor:aws"
     driver_opts:
       backing: relocatable
-      size: 4
-      ebstype: io1
-      iops: 100
+      size: 1
+      ebstype: gp2
