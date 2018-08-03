@@ -1,4 +1,4 @@
-image: redmic/docker-gitlab
+image: registry.gitlab.com/redmic-project/docker/docker-deploy
 
 stages:
   - package
@@ -8,9 +8,9 @@ stages:
 variables:
   CONFLUENT_VERSION: 4.1.2
 
-docker-build-dev:
+docker-build-commit-non-master-branches:
   stage: package
-  image: redmic/docker-gitlab
+  image: docker:stable
   variables:
     DOCKER_DRIVER: overlay2
     IMAGE_NAME: ${CI_REGISTRY_IMAGE}/connector-supplier
@@ -25,9 +25,9 @@ docker-build-dev:
     - docker build -t ${IMAGE_NAME}:${CI_COMMIT_SHA} -t ${IMAGE_NAME}:${CI_COMMIT_REF_NAME}-latest .
     - docker push ${IMAGE_NAME}
 
-docker-build-pro:
+docker-build-commit-master-branch:
   stage: package
-  image: redmic/docker-gitlab
+  image: docker:stable
   variables:
     DOCKER_DRIVER: overlay2
     IMAGE_NAME: ${CI_REGISTRY_IMAGE}/connector-supplier
@@ -40,30 +40,29 @@ docker-build-pro:
     - docker build -t ${IMAGE_NAME}:${CI_COMMIT_SHA} -t ${IMAGE_NAME}:latest .
     - docker push ${IMAGE_NAME}
 
-container_scanning:
+container-scanning:
   stage: test-package
   image: docker:stable
   variables:
     DOCKER_DRIVER: overlay2
-    IMAGE_NAME: ${CI_REGISTRY_IMAGE}/connector-supplier
   allow_failure: true
   services:
     - docker:stable-dind
   only:
     - branches
-  except:
-    - master
   script:
     - docker run -d --name db arminc/clair-db:latest
     - docker run -p 6060:6060 --link db:postgres -d --name clair arminc/clair-local-scan:v2.0.1
     - apk add -U wget ca-certificates
     - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
-    - docker pull ${IMAGE_NAME}:${CI_COMMIT_SHA}
+    - docker pull ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
     - wget https://github.com/arminc/clair-scanner/releases/download/v8/clair-scanner_linux_amd64
     - mv clair-scanner_linux_amd64 clair-scanner
     - chmod +x clair-scanner
     - touch clair-whitelist.yml
-    - ./clair-scanner -c http://docker:6060 --ip $(hostname -i) -r gl-sast-container-report.json -l clair.log -w clair-whitelist.yml ${IMAGE_NAME}:${CI_COMMIT_SHA} || true
+    - >
+      ./clair-scanner -c http://docker:6060 --ip $(hostname -i) -r gl-sast-container-report.json -l clair.log
+      -w clair-whitelist.yml ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA} || true
   artifacts:
     paths: [gl-sast-container-report.json]
 
@@ -71,6 +70,7 @@ deploy-zookeeper-dev:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: zookeeper
     SSH_REMOTE: ${DEV_SSH_REMOTE}
     IMAGE_TAG: ${CONFLUENT_VERSION}
     COMPOSE_FILE: docker-compose.tmpl.yml:docker-compose.dev.yml
@@ -78,7 +78,6 @@ deploy-zookeeper-dev:
     - docker:dind
   script:
     - create-nets.sh kafka-net
-    - cd zookeeper
     - export SERVICE=zk-1
     - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
     - export SERVICE=zk-2
@@ -97,6 +96,7 @@ deploy-zookeeper-pro:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: zookeeper
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     IMAGE_TAG: ${CONFLUENT_VERSION}
     COMPOSE_FILE: docker-compose.tmpl.yml:docker-compose.prod.yml
@@ -104,7 +104,6 @@ deploy-zookeeper-pro:
     - docker:dind
   script:
     - create-nets.sh kafka-net
-    - cd zookeeper
     - export SERVICE=zk-1
     - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
     - export SERVICE=zk-2
@@ -121,6 +120,7 @@ deploy-kafka-dev:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: kafka
     SSH_REMOTE: ${DEV_SSH_REMOTE}
     IMAGE_TAG: ${CONFLUENT_VERSION}
     COMPOSE_FILE: docker-compose.tmpl.yml:docker-compose.dev.yml
@@ -128,7 +128,6 @@ deploy-kafka-dev:
   services:
     - docker:dind
   script:
-    - cd kafka
     - export SERVICE=kf-1
     - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME}
     - export SERVICE=kf-2
@@ -147,13 +146,13 @@ deploy-kafka-pro:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: kafka
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     IMAGE_TAG: ${CONFLUENT_VERSION}
     COMPOSE_FILE: docker-compose.tmpl.yml:docker-compose.prod.yml
   services:
     - docker:dind
   script:
-    - cd kafka
     - export SERVICE=kf-1
     - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
     - export SERVICE=kf-2
@@ -170,6 +169,7 @@ deploy-connect-dev:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${DEV_SSH_REMOTE}
     SERVICE: connect
     IMAGE_TAG: ${CONFLUENT_VERSION}
@@ -177,7 +177,6 @@ deploy-connect-dev:
   services:
     - docker:dind
   script:
-    - cd workers
     - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
   environment:
     name: dev/${SERVICE}
@@ -191,6 +190,7 @@ deploy-connect-pro:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     SERVICE: connect
     IMAGE_TAG: ${CONFLUENT_VERSION}
@@ -198,7 +198,6 @@ deploy-connect-pro:
   services:
     - docker:dind
   script:
-    - cd workers
     - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
   environment:
     name: pro/${SERVICE}
@@ -208,9 +207,9 @@ deploy-connect-pro:
 
 deploy-connector-supplier-dev:
   stage: deploy
-  image: redmic/docker-gitlab
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${DEV_SSH_REMOTE}
     SERVICE: connector-supplier
     IMAGE_NAME: ${CI_REGISTRY_IMAGE}/connector-supplier
@@ -220,8 +219,9 @@ deploy-connector-supplier-dev:
   services:
     - docker:dind
   script:
-    - cd workers
-    - deploy.sh IMAGE_NAME=${IMAGE_NAME} IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} CONNECT_ADDRS=${CONNECT_ADDRS} POSTGRES_USER=${POSTGRES_USER} POSTGRES_PASS=${POSTGRES_PASS}
+    - >
+      deploy.sh IMAGE_NAME=${IMAGE_NAME} IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
+      CONNECT_ADDRS=${CONNECT_ADDRS} POSTGRES_USER=${POSTGRES_USER} POSTGRES_PASS=${POSTGRES_PASS}
   environment:
     name: dev/${SERVICE}
   only:
@@ -232,9 +232,9 @@ deploy-connector-supplier-dev:
 
 deploy-connector-supplier-pro:
   stage: deploy
-  image: redmic/docker-gitlab
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     SERVICE: connector-supplier
     IMAGE_NAME: ${CI_REGISTRY_IMAGE}/connector-supplier
@@ -244,8 +244,9 @@ deploy-connector-supplier-pro:
   services:
     - docker:dind
   script:
-    - cd workers
-    - deploy.sh IMAGE_NAME=${IMAGE_NAME} IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} CONNECT_ADDRS=${CONNECT_ADDRS} POSTGRES_USER=${POSTGRES_USER} POSTGRES_PASS=${POSTGRES_PASS}
+    - >
+      deploy.sh IMAGE_NAME=${IMAGE_NAME} IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
+      CONNECT_ADDRS=${CONNECT_ADDRS} POSTGRES_USER=${POSTGRES_USER} POSTGRES_PASS=${POSTGRES_PASS}
   environment:
     name: pro/${SERVICE}
   only:
@@ -256,6 +257,7 @@ deploy-schema-registry-dev:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${DEV_SSH_REMOTE}
     SERVICE: schema-registry
     IMAGE_TAG: ${CONFLUENT_VERSION}
@@ -263,7 +265,6 @@ deploy-schema-registry-dev:
   services:
     - docker:dind
   script:
-    - cd workers
     - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
   environment:
     name: dev/${SERVICE}
@@ -277,6 +278,7 @@ deploy-schema-registry-pro:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     SERVICE: schema-registry
     IMAGE_TAG: ${CONFLUENT_VERSION}
@@ -284,7 +286,6 @@ deploy-schema-registry-pro:
   services:
     - docker:dind
   script:
-    - cd workers
     - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
   environment:
     name: pro/${SERVICE}
@@ -296,6 +297,7 @@ deploy-kafka-rest-dev:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${DEV_SSH_REMOTE}
     SERVICE: kafka-rest
     IMAGE_TAG: ${CONFLUENT_VERSION}
@@ -304,7 +306,6 @@ deploy-kafka-rest-dev:
   services:
     - docker:dind
   script:
-    - cd workers
     - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME}
   environment:
     name: dev/${SERVICE}
@@ -318,6 +319,7 @@ deploy-kafka-rest-pro:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     SERVICE: kafka-rest
     IMAGE_TAG: ${CONFLUENT_VERSION}
@@ -326,7 +328,6 @@ deploy-kafka-rest-pro:
   services:
     - docker:dind
   script:
-    - cd workers
     - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME}
   environment:
     name: pro/${SERVICE}
@@ -338,6 +339,7 @@ deploy-kafka-manager-dev:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: uis
     SSH_REMOTE: ${DEV_SSH_REMOTE}
     IMAGE_TAG: latest
     SERVICE: kafka-manager
@@ -346,7 +348,6 @@ deploy-kafka-manager-dev:
   services:
     - docker:dind
   script:
-    - cd uis
     - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
   environment:
     name: dev/${SERVICE}
@@ -361,6 +362,7 @@ deploy-kafka-manager-pro:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: uis
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     IMAGE_TAG: latest
     SERVICE: kafka-manager
@@ -369,7 +371,6 @@ deploy-kafka-manager-pro:
   services:
     - docker:dind
   script:
-    - cd uis
     - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME} UI_AUTH=${UI_AUTH}
   environment:
     name: pro/${SERVICE}
@@ -382,6 +383,7 @@ deploy-kafka-topics-ui-dev:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: uis
     SSH_REMOTE: ${DEV_SSH_REMOTE}
     IMAGE_TAG: latest
     SERVICE: kafka-topics-ui
@@ -390,7 +392,6 @@ deploy-kafka-topics-ui-dev:
   services:
     - docker:dind
   script:
-    - cd uis
     - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
   environment:
     name: dev/${SERVICE}
@@ -405,6 +406,7 @@ deploy-kafka-topics-ui-pro:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: uis
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     IMAGE_TAG: latest
     SERVICE: kafka-topics-ui
@@ -413,8 +415,9 @@ deploy-kafka-topics-ui-pro:
   services:
     - docker:dind
   script:
-    - cd uis
-    - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME} UI_AUTH=${UI_AUTH}
+    - >
+      deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME}
+      UI_AUTH=${UI_AUTH}
   environment:
     name: pro/${SERVICE}
     url: https://kafkatopicsui.${PUBLIC_HOSTNAME}
@@ -426,6 +429,7 @@ deploy-kafka-connect-ui-dev:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: uis
     SSH_REMOTE: ${DEV_SSH_REMOTE}
     IMAGE_TAG: latest
     SERVICE: kafka-connect-ui
@@ -434,7 +438,6 @@ deploy-kafka-connect-ui-dev:
   services:
     - docker:dind
   script:
-    - cd uis
     - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME}
   environment:
     name: dev/${SERVICE}
@@ -449,6 +452,7 @@ deploy-kafka-connect-ui-pro:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: uis
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     IMAGE_TAG: latest
     SERVICE: kafka-connect-ui
@@ -457,8 +461,9 @@ deploy-kafka-connect-ui-pro:
   services:
     - docker:dind
   script:
-    - cd uis
-    - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME} UI_AUTH=${UI_AUTH}
+    - >
+      deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME}
+      UI_AUTH=${UI_AUTH}
   environment:
     name: pro/${SERVICE}
     url: https://kafkaconnectui.${PUBLIC_HOSTNAME}
@@ -470,6 +475,7 @@ deploy-schema-registry-ui-dev:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: uis
     SSH_REMOTE: ${DEV_SSH_REMOTE}
     IMAGE_TAG: latest
     SERVICE: schema-registry-ui
@@ -478,7 +484,6 @@ deploy-schema-registry-ui-dev:
   services:
     - docker:dind
   script:
-    - cd uis
     - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
   environment:
     name: dev/${SERVICE}
@@ -493,6 +498,7 @@ deploy-schema-registry-ui-pro:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    DEPLOY_DIR_NAME: uis
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     IMAGE_TAG: latest
     SERVICE: schema-registry-ui
@@ -501,8 +507,9 @@ deploy-schema-registry-ui-pro:
   services:
     - docker:dind
   script:
-    - cd uis
-    - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME} UI_AUTH=${UI_AUTH}
+    - >
+      deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME}
+      UI_AUTH=${UI_AUTH}
   environment:
     name: pro/${SERVICE}
     url: https://schemaregistryui.${PUBLIC_HOSTNAME}
