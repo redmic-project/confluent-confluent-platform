@@ -192,7 +192,7 @@ deploy-connect-pro:
     DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     SERVICE: connect
-    SERVICES_TO_CHECK: workers_connect
+    SERVICES_TO_CHECK: connect_connect
     IMAGE_TAG: ${CONFLUENT_VERSION}
     COMPOSE_FILE: docker-compose.${SERVICE}.tmpl.yml:docker-compose.${SERVICE}.prod.yml
   services:
@@ -237,7 +237,7 @@ deploy-connector-supplier-pro:
     DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     SERVICE: connector-supplier
-    SERVICES_TO_CHECK: workers_connector-supplier
+    SERVICES_TO_CHECK: connector-supplier_connector-supplier
     IMAGE_NAME: ${CI_REGISTRY_IMAGE}/connector-supplier
     IMAGE_TAG: ${CI_COMMIT_SHA}
     COMPOSE_FILE: docker-compose.${SERVICE}.tmpl.yml:docker-compose.${SERVICE}.prod.yml
@@ -282,7 +282,7 @@ deploy-schema-registry-pro:
     DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     SERVICE: schema-registry
-    SERVICES_TO_CHECK: workers_schema-registry
+    SERVICES_TO_CHECK: schema-registry_schema-registry
     IMAGE_TAG: ${CONFLUENT_VERSION}
     COMPOSE_FILE: docker-compose.${SERVICE}.tmpl.yml:docker-compose.${SERVICE}.prod.yml
   services:
@@ -324,7 +324,7 @@ deploy-kafka-rest-pro:
     DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     SERVICE: kafka-rest
-    SERVICES_TO_CHECK: workers_kafka-rest
+    SERVICES_TO_CHECK: kafka-rest_kafka-rest
     IMAGE_TAG: ${CONFLUENT_VERSION}
     COMPOSE_FILE: docker-compose.${SERVICE}.tmpl.yml:docker-compose.${SERVICE}.prod.yml
     PUBLIC_HOSTNAME: ${PRO_PUBLIC_HOSTNAME}
@@ -369,7 +369,7 @@ deploy-kafka-manager-pro:
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     IMAGE_TAG: latest
     SERVICE: kafka-manager
-    SERVICES_TO_CHECK: uis_kafka-manager
+    SERVICES_TO_CHECK: kafka-manager_kafka-manager
     COMPOSE_FILE: docker-compose.${SERVICE}.tmpl.yml:docker-compose.${SERVICE}.prod.yml
     PUBLIC_HOSTNAME: ${PRO_PUBLIC_HOSTNAME}
   services:
@@ -414,7 +414,7 @@ deploy-kafka-topics-ui-pro:
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     IMAGE_TAG: latest
     SERVICE: kafka-topics-ui
-    SERVICES_TO_CHECK: uis_kafka-topics-ui
+    SERVICES_TO_CHECK: kafka-topics-ui_kafka-topics-ui
     COMPOSE_FILE: docker-compose.${SERVICE}.tmpl.yml:docker-compose.${SERVICE}.prod.yml
     PUBLIC_HOSTNAME: ${PRO_PUBLIC_HOSTNAME}
   services:
@@ -461,7 +461,7 @@ deploy-kafka-connect-ui-pro:
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     IMAGE_TAG: latest
     SERVICE: kafka-connect-ui
-    SERVICES_TO_CHECK: uis_kafka-connect-ui
+    SERVICES_TO_CHECK: kafka-connect-ui_kafka-connect-ui
     COMPOSE_FILE: docker-compose.${SERVICE}.tmpl.yml:docker-compose.${SERVICE}.prod.yml
     PUBLIC_HOSTNAME: ${PRO_PUBLIC_HOSTNAME}
   services:
@@ -508,7 +508,7 @@ deploy-schema-registry-ui-pro:
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     IMAGE_TAG: latest
     SERVICE: schema-registry-ui
-    SERVICES_TO_CHECK: uis_schema-registry-ui
+    SERVICES_TO_CHECK: schema-registry-ui_schema-registry-ui
     COMPOSE_FILE: docker-compose.${SERVICE}.tmpl.yml:docker-compose.${SERVICE}.prod.yml
     PUBLIC_HOSTNAME: ${PRO_PUBLIC_HOSTNAME}
   services:
