@@ -2,9 +2,6 @@ version: '3.5'
 
 services:
   kf-1:
-    ports:
-      - '${KF_PORT}'
-      - '9997'
     environment:
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kf-1:${KF_PORT}
       - KAFKA_HEAP_OPTS=-Xmx4g -Xms4g
@@ -20,9 +17,6 @@ services:
         max_attempts: 3
 
   kf-2:
-    ports:
-      - '${KF_PORT}'
-      - '9998'
     environment:
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kf-2:${KF_PORT}
       - KAFKA_HEAP_OPTS=-Xmx4g -Xms4g
@@ -38,9 +32,6 @@ services:
         max_attempts: 3
 
   kf-3:
-    ports:
-      - '${KF_PORT}'
-      - '9999'
     environment:
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kf-3:${KF_PORT}
       - KAFKA_HEAP_OPTS=-Xmx4g -Xms4g

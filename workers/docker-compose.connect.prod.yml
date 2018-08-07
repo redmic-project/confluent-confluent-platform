@@ -2,8 +2,6 @@ version: '3.5'
 
 services:
   connect:
-    ports:
-      - ${CN_PORT}
     deploy:
       mode: replicated
       replicas: 1

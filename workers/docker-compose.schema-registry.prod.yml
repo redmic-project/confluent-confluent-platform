@@ -2,8 +2,6 @@ version: '3.5'
 
 services:
   schema-registry:
-    ports:
-      - '${SR_PORT}'
     environment:
       - SCHEMA_REGISTRY_HEAP_OPTS=-Xmx1g -Xms1g
     deploy:

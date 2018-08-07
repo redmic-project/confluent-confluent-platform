@@ -2,8 +2,6 @@ version: '3.5'
 
 services:
   kafka-rest:
-    ports:
-      - ${KR_PORT}
     environment:
       KAFKA_REST_HEAP_OPTS: '-Xmx1g -Xms1g'
     deploy:
