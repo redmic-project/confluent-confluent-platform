@@ -2,11 +2,6 @@ version: '3.5'
 
 services:
   zk-1:
-    ports:
-      - ${ZK_PORT}
-      - 2888
-      - 3888
-      - 9990
     environment:
       ZOOKEEPER_HEAP_OPTS: '-Xmx1g -Xms1g'
     deploy:
@@ -21,11 +16,6 @@ services:
         max_attempts: 3
 
   zk-2:
-    ports:
-      - ${ZK_PORT}
-      - 2888
-      - 3888
-      - 9991
     environment:
       ZOOKEEPER_HEAP_OPTS: '-Xmx1g -Xms1g'
     deploy:
@@ -40,11 +30,6 @@ services:
         max_attempts: 3
 
   zk-3:
-    ports:
-      - ${ZK_PORT}
-      - 2888
-      - 3888
-      - 9992
     environment:
       ZOOKEEPER_HEAP_OPTS: '-Xmx1g -Xms1g'
     deploy:
