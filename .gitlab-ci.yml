@@ -189,6 +189,8 @@ deploy-connect-pro:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    STATUS_CHECK_DELAY: '60'
+    STATUS_CHECK_INTERVAL: '20'
     DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     SERVICE: connect
@@ -281,6 +283,7 @@ deploy-schema-registry-pro:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    STATUS_CHECK_DELAY: '40'
     DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     SERVICE: schema-registry
@@ -324,6 +327,7 @@ deploy-kafka-rest-pro:
   stage: deploy
   variables:
     DOCKER_DRIVER: overlay2
+    STATUS_CHECK_DELAY: '40'
     DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     SERVICE: kafka-rest
