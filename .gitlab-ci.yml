@@ -101,7 +101,7 @@ deploy-zookeeper-pro:
     STATUS_CHECK_INTERVAL: '20'
     DEPLOY_DIR_NAME: zookeeper
     SSH_REMOTE: ${PRO_SSH_REMOTE}
-    SERVICE: confluent
+    STACK: confluent
     SERVICES_TO_CHECK: confluent_zk-1 confluent_zk-2 confluent_zk-3
     IMAGE_TAG: ${CONFLUENT_VERSION}
     COMPOSE_FILE: docker-compose.tmpl.yml:docker-compose.prod.yml
@@ -150,7 +150,7 @@ deploy-kafka-pro:
     STATUS_CHECK_INTERVAL: '20'
     DEPLOY_DIR_NAME: kafka
     SSH_REMOTE: ${PRO_SSH_REMOTE}
-    SERVICE: confluent
+    STACK: confluent
     SERVICES_TO_CHECK: confluent_kf-1 confluent_kf-2 confluent_kf-3
     IMAGE_TAG: ${CONFLUENT_VERSION}
     COMPOSE_FILE: docker-compose.tmpl.yml:docker-compose.prod.yml
@@ -191,7 +191,7 @@ deploy-connect-pro:
     DOCKER_DRIVER: overlay2
     DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${PRO_SSH_REMOTE}
-    SERVICE: confluent
+    STACK: confluent
     SERVICES_TO_CHECK: confluent_connect
     IMAGE_TAG: ${CONFLUENT_VERSION}
     COMPOSE_FILE: docker-compose.${SERVICE}.tmpl.yml:docker-compose.${SERVICE}.prod.yml
@@ -236,7 +236,7 @@ deploy-connector-supplier-pro:
     DOCKER_DRIVER: overlay2
     DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${PRO_SSH_REMOTE}
-    SERVICE: confluent
+    STACK: confluent
     SERVICES_TO_CHECK: confluent_connector-supplier
     IMAGE_NAME: ${CI_REGISTRY_IMAGE}/connector-supplier
     IMAGE_TAG: ${CI_COMMIT_SHA}
@@ -281,7 +281,7 @@ deploy-schema-registry-pro:
     DOCKER_DRIVER: overlay2
     DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${PRO_SSH_REMOTE}
-    SERVICE: confluent
+    STACK: confluent
     SERVICES_TO_CHECK: confluent_schema-registry
     IMAGE_TAG: ${CONFLUENT_VERSION}
     COMPOSE_FILE: docker-compose.${SERVICE}.tmpl.yml:docker-compose.${SERVICE}.prod.yml
@@ -323,7 +323,7 @@ deploy-kafka-rest-pro:
     DOCKER_DRIVER: overlay2
     DEPLOY_DIR_NAME: workers
     SSH_REMOTE: ${PRO_SSH_REMOTE}
-    SERVICE: confluent
+    STACK: confluent
     SERVICES_TO_CHECK: confluent_kafka-rest
     IMAGE_TAG: ${CONFLUENT_VERSION}
     COMPOSE_FILE: docker-compose.${SERVICE}.tmpl.yml:docker-compose.${SERVICE}.prod.yml
@@ -368,7 +368,7 @@ deploy-kafka-manager-pro:
     DEPLOY_DIR_NAME: uis
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     IMAGE_TAG: latest
-    SERVICE: confluent
+    STACK: confluent
     SERVICES_TO_CHECK: confluent_kafka-manager
     COMPOSE_FILE: docker-compose.${SERVICE}.tmpl.yml:docker-compose.${SERVICE}.prod.yml
     PUBLIC_HOSTNAME: ${PRO_PUBLIC_HOSTNAME}
@@ -413,7 +413,7 @@ deploy-kafka-topics-ui-pro:
     DEPLOY_DIR_NAME: uis
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     IMAGE_TAG: latest
-    SERVICE: confluent
+    STACK: confluent
     SERVICES_TO_CHECK: confluent_kafka-topics-ui
     COMPOSE_FILE: docker-compose.${SERVICE}.tmpl.yml:docker-compose.${SERVICE}.prod.yml
     PUBLIC_HOSTNAME: ${PRO_PUBLIC_HOSTNAME}
@@ -460,7 +460,7 @@ deploy-kafka-connect-ui-pro:
     DEPLOY_DIR_NAME: uis
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     IMAGE_TAG: latest
-    SERVICE: confluent
+    STACK: confluent
     SERVICES_TO_CHECK: confluent_kafka-connect-ui
     COMPOSE_FILE: docker-compose.${SERVICE}.tmpl.yml:docker-compose.${SERVICE}.prod.yml
     PUBLIC_HOSTNAME: ${PRO_PUBLIC_HOSTNAME}
@@ -507,7 +507,7 @@ deploy-schema-registry-ui-pro:
     DEPLOY_DIR_NAME: uis
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     IMAGE_TAG: latest
-    SERVICE: confluent
+    STACK: confluent
     SERVICES_TO_CHECK: confluent_schema-registry-ui
     COMPOSE_FILE: docker-compose.${SERVICE}.tmpl.yml:docker-compose.${SERVICE}.prod.yml
     PUBLIC_HOSTNAME: ${PRO_PUBLIC_HOSTNAME}
