@@ -19,9 +19,12 @@ while [[ "${done}" = false ]]; do
 			echo "Connected, creating connectors at host: ${addr}"
 
 			curl -s -X POST -H "Content-Type: application/json" --data \
-				"{\"name\": \"jdbc-sink\", \"config\": {\"name\":\"jdbc-sink\", \"connector.class\":\"io.confluent.connect.jdbc.JdbcSinkConnector\", \"tasks.max\":\"1\", \"topics\":\"realtime.tracking.vessels\", \"connection.url\": \"jdbc:postgresql://ais-db:5432/ais\", \"connection.password\": \"${POSTGRES_PASS}\", \"connection.user\": \"${POSTGRES_USER}\", \"table.name.format\": \"last_position\", \"auto.evolve\": \"true\", \"insert.mode\": \"upsert\", \"pk.mode\": \"record_value\", \"pk.fields\": \"mmsi\"}}" \
+				"{\"name\": \"jdbc-ais-last-position-sink\", \"config\": {\"name\":\"jdbc-ais-last-position-sink\", \"connector.class\":\"io.confluent.connect.jdbc.JdbcSinkConnector\", \"tasks.max\":\"1\", \"topics\":\"realtime.tracking.vessels\", \"connection.url\": \"jdbc:postgresql://ais-db:5432/ais\", \"connection.password\": \"${POSTGRES_PASS}\", \"connection.user\": \"${POSTGRES_USER}\", \"table.name.format\": \"last_position\", \"auto.evolve\": \"true\", \"insert.mode\": \"upsert\", \"pk.mode\": \"record_value\", \"pk.fields\": \"mmsi\"}}" \
 				"http://${addr}/connectors" >& /dev/null
 
+			curl -s -X POST -H "Content-Type: application/json" --data \
+				"{\"name\": \"jdbc-ais-last-week-sink\", \"config\": {\"name\":\"jdbc-ais-last-week-sink\", \"connector.class\":\"io.confluent.connect.jdbc.JdbcSinkConnector\", \"tasks.max\":\"1\", \"topics\":\"realtime.tracking.vessels\", \"connection.url\": \"jdbc:postgresql://ais-db:5432/ais\", \"connection.password\": \"${POSTGRES_PASS}\", \"connection.user\": \"${POSTGRES_USER}\", \"table.name.format\": \"last_week\", \"auto.evolve\": \"true\"}}" \
+				"http://${addr}/connectors" >& /dev/null
 			break
 		fi
 
