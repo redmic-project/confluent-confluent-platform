@@ -10,6 +10,7 @@ services:
           - node.role == worker
       restart_policy:
         condition: on-failure
-        max_attempts: 3
+        delay: 1m
+        window: 3m
     environment:
       CONNECT_HEAP_OPTS: '-Xmx1g -Xms1g'

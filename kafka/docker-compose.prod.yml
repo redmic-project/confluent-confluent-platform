@@ -14,7 +14,8 @@ services:
           - engine.labels.availability_zone == ${AWS_REGION}a
       restart_policy:
         condition: on-failure
-        max_attempts: 3
+        delay: 1m
+        window: 3m
 
   kf-2:
     environment:
@@ -29,7 +30,8 @@ services:
           - engine.labels.availability_zone == ${AWS_REGION}b
       restart_policy:
         condition: on-failure
-        max_attempts: 3
+        delay: 1m
+        window: 3m
 
   kf-3:
     environment:
@@ -44,7 +46,8 @@ services:
           - engine.labels.availability_zone == ${AWS_REGION}c
       restart_policy:
         condition: on-failure
-        max_attempts: 3
+        delay: 1m
+        window: 3m
 
 volumes:
   kf-1-data-vol:
