@@ -10,7 +10,7 @@ services:
       placement:
         constraints:
           - node.role == worker
-          - node.labels.workerid == 1
+          - engine.labels.availability_zone == ${AWS_REGION}a
       restart_policy:
         condition: on-failure
         max_attempts: 3
@@ -24,7 +24,7 @@ services:
       placement:
         constraints:
           - node.role == worker
-          - node.labels.workerid == 2
+          - engine.labels.availability_zone == ${AWS_REGION}b
       restart_policy:
         condition: on-failure
         max_attempts: 3
@@ -38,7 +38,7 @@ services:
       placement:
         constraints:
           - node.role == worker
-          - node.labels.workerid == 3
+          - engine.labels.availability_zone == ${AWS_REGION}c
       restart_policy:
         condition: on-failure
         max_attempts: 3

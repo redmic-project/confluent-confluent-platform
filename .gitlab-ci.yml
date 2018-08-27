@@ -109,7 +109,7 @@ deploy-zookeeper-pro:
     - docker:dind
   script:
     - create-nets.sh kafka-net
-    - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
+    - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} AWS_REGION=${AWS_REGION}
   environment:
     name: pro/zookeeper
   only:
@@ -157,7 +157,7 @@ deploy-kafka-pro:
   services:
     - docker:dind
   script:
-    - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
+    - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} AWS_REGION=${AWS_REGION}
   environment:
     name: pro/kafka
   only:
