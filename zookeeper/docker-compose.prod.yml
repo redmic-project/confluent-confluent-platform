@@ -1,5 +1,26 @@
 version: '3.5'
 
+x-prod-environment:
+  &prod-environment
+  - ZOOKEEPER_HEAP_OPTS=-Xmx512m -Xms512m
+
+x-prod-deploy:
+  &prod-deploy
+  mode: replicated
+  replicas: 1
+  placement:
+    constraints:
+      - node.role == worker
+  restart_policy:
+    delay: 30s
+    window: 2m
+  resources:
+    limits:
+      cpus: '0.5'
+      memory: 512M
+    reservations:
+      memory: 410M
+
 services:
   zk-1:
     environment: *prod-environment
@@ -24,6 +45,14 @@ services:
       placement:
         constraints:
           - engine.labels.availability_zone == ${AWS_REGION}c
+
+x-prod-default-volume:
+  &prod-default-volume
+  driver: "cloudstor:aws"
+  driver_opts:
+    backing: relocatable
+    size: 1
+    ebstype: gp2
 
 volumes:
   zk-1-data-vol:
@@ -58,32 +87,3 @@ volumes:
 
   zk-3-secrets-vol:
     name: zk-3-secrets-vol
-
-x-prod-environment:
-  &prod-environment
-  - ZOOKEEPER_HEAP_OPTS=-Xmx512m -Xms512m
-
-x-prod-deploy:
-  &prod-deploy
-  mode: replicated
-  replicas: 1
-  placement:
-    constraints:
-      - node.role == worker
-  restart_policy:
-    delay: 30s
-    window: 2m
-  resources:
-    limits:
-      cpus: '0.5'
-      memory: 512M
-    reservations:
-      memory: 410M
-
-x-prod-default-volume:
-  &prod-default-volume
-  driver: "cloudstor:aws"
-  driver_opts:
-    backing: relocatable
-    size: 1
-    ebstype: gp2

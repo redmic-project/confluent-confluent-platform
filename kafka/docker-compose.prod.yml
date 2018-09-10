@@ -1,5 +1,26 @@
 version: '3.5'
 
+x-prod-environment:
+  &prod-environment
+  - KAFKA_HEAP_OPTS=-Xmx2g -Xms2g
+
+x-prod-deploy:
+  &prod-deploy
+  mode: replicated
+  replicas: 1
+  placement:
+    constraints:
+      - node.role == worker
+  restart_policy:
+    delay: 30s
+    window: 2m
+  resources:
+    limits:
+      cpus: '1'
+      memory: 3G
+    reservations:
+      memory: 2458M
+
 services:
   kf-1:
     environment:
@@ -31,6 +52,14 @@ services:
         constraints:
           - engine.labels.availability_zone == ${AWS_REGION}c
 
+x-prod-default-volume:
+  &prod-default-volume
+  driver: "cloudstor:aws"
+  driver_opts:
+    backing: relocatable
+    size: 500
+    ebstype: st1
+
 volumes:
   kf-1-data-vol:
     << : *prod-default-volume
@@ -52,32 +81,3 @@ volumes:
 
   kf-3-secrets-vol:
     name: kf-3-secrets-vol
-
-x-prod-environment:
-  &prod-environment
-  - KAFKA_HEAP_OPTS=-Xmx2g -Xms2g
-
-x-prod-deploy:
-  &prod-deploy
-  mode: replicated
-  replicas: 1
-  placement:
-    constraints:
-      - node.role == worker
-  restart_policy:
-    delay: 30s
-    window: 2m
-  resources:
-    limits:
-      cpus: '1'
-      memory: 3G
-    reservations:
-      memory: 2458M
-
-x-prod-default-volume:
-  &prod-default-volume
-  driver: "cloudstor:aws"
-  driver_opts:
-    backing: relocatable
-    size: 500
-    ebstype: st1

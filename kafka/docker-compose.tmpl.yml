@@ -1,5 +1,27 @@
 version: '3.5'
 
+x-tmpl-environment:
+  &tmpl-environment
+  - KAFKA_ZOOKEEPER_CONNECT=zk-1:${ZK_PORT},zk-2:${ZK_PORT},zk-3:${ZK_PORT}
+  - KAFKA_LOG_DIRS
+  - KAFKA_LOG_CLEANER_ENABLE
+  - KAFKA_LOG_CLEANUP_POLICY
+  - KAFKA_LOG_CLEANER_MIN_CLEANABLE_RATIO
+  - KAFKA_LOG_CLEANER_MIN_COMPACTION_LAG_MS
+  - KAFKA_LOG_ROLL_HOURS
+  - KAFKA_NUM_PARTITIONS
+  - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+  - KAFKA_DEFAULT_REPLICATION_FACTOR
+  - KAFKA_MIN_INSYNC_REPLICAS
+
+x-tmpl-healthcheck:
+  &tmpl-healthcheck
+  test: kafka-topics --list -zookeeper $${KAFKA_ZOOKEEPER_CONNECT}
+  interval: 30s
+  timeout: 30s
+  retries: 3
+  start_period: 2m
+
 services:
   kf-1:
     image: confluentinc/cp-kafka:${IMAGE_TAG:-latest}
@@ -49,25 +71,3 @@ services:
 networks:
   kafka-net:
     external: true
-
-x-tmpl-environment:
-  &tmpl-environment
-  - KAFKA_ZOOKEEPER_CONNECT=zk-1:${ZK_PORT},zk-2:${ZK_PORT},zk-3:${ZK_PORT}
-  - KAFKA_LOG_DIRS
-  - KAFKA_LOG_CLEANER_ENABLE
-  - KAFKA_LOG_CLEANUP_POLICY
-  - KAFKA_LOG_CLEANER_MIN_CLEANABLE_RATIO
-  - KAFKA_LOG_CLEANER_MIN_COMPACTION_LAG_MS
-  - KAFKA_LOG_ROLL_HOURS
-  - KAFKA_NUM_PARTITIONS
-  - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
-  - KAFKA_DEFAULT_REPLICATION_FACTOR
-  - KAFKA_MIN_INSYNC_REPLICAS
-
-x-tmpl-healthcheck:
-  &tmpl-healthcheck
-  test: kafka-topics --list -zookeeper $${KAFKA_ZOOKEEPER_CONNECT}
-  interval: 30s
-  timeout: 30s
-  retries: 3
-  start_period: 2m

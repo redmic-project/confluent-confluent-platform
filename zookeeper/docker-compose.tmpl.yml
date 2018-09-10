@@ -1,5 +1,23 @@
 version: '3.5'
 
+x-tmpl-environment:
+  &tmpl-environment
+  - ZOOKEEPER_CLIENT_PORT=${ZK_PORT}
+  - ZOOKEEPER_TICK_TIME=2000
+  - ZOOKEEPER_INIT_LIMIT=5
+  - ZOOKEEPER_SYNC_LIMIT=2
+  - ZOOKEEPER_AUTOPURGE_SNAP_RETAIN_COUNT=3
+  - ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL=24
+  - ZOOKEEPER_SERVERS=zk-1:2888:3888;zk-2:2888:3888;zk-3:2888:3888
+
+x-tmpl-healthcheck:
+  &tmpl-healthcheck
+  test: echo ruok | nc localhost ${ZK_PORT}
+  interval: 30s
+  timeout: 5s
+  retries: 3
+  start_period: 2m
+
 services:
   zk-1:
     image: confluentinc/cp-zookeeper:${IMAGE_TAG:-latest}
@@ -49,21 +67,3 @@ services:
 networks:
   kafka-net:
     external: true
-
-x-tmpl-environment:
-  &tmpl-environment
-  - ZOOKEEPER_CLIENT_PORT=${ZK_PORT}
-  - ZOOKEEPER_TICK_TIME=2000
-  - ZOOKEEPER_INIT_LIMIT=5
-  - ZOOKEEPER_SYNC_LIMIT=2
-  - ZOOKEEPER_AUTOPURGE_SNAP_RETAIN_COUNT=3
-  - ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL=24
-  - ZOOKEEPER_SERVERS=zk-1:2888:3888;zk-2:2888:3888;zk-3:2888:3888
-
-x-tmpl-healthcheck:
-  &tmpl-healthcheck
-  test: echo ruok | nc localhost ${ZK_PORT}
-  interval: 30s
-  timeout: 5s
-  retries: 3
-  start_period: 2m

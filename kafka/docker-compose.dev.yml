@@ -1,5 +1,23 @@
 version: '3.5'
 
+x-dev-environment:
+  &dev-environment
+  - KAFKA_HEAP_OPTS=-Xmx512m -Xms512m
+
+x-dev-deploy:
+  &dev-deploy
+  mode: replicated
+  replicas: 1
+  restart_policy:
+    delay: 30s
+    window: 2m
+  resources:
+    limits:
+      cpus: '1'
+      memory: 1G
+    reservations:
+      memory: 820M
+
 services:
   kf-1:
     environment:
@@ -49,21 +67,3 @@ volumes:
 
   kf-3-secrets-vol:
     name: kf-3-secrets-vol
-
-x-dev-environment:
-  &dev-environment
-  - KAFKA_HEAP_OPTS=-Xmx512m -Xms512m
-
-x-dev-deploy:
-  &dev-deploy
-  mode: replicated
-  replicas: 1
-  restart_policy:
-    delay: 30s
-    window: 2m
-  resources:
-    limits:
-      cpus: '1'
-      memory: 1G
-    reservations:
-      memory: 820M
