@@ -2,7 +2,7 @@ version: '3.5'
 
 x-dev-environment:
   &dev-environment
-  - ZOOKEEPER_HEAP_OPTS=-Xmx256m -Xms256m
+  ZOOKEEPER_HEAP_OPTS: '-Xmx256m -Xms256m'
 
 x-dev-deploy:
   &dev-deploy

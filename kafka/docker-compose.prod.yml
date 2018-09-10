@@ -2,7 +2,7 @@ version: '3.5'
 
 x-prod-environment:
   &prod-environment
-  - KAFKA_HEAP_OPTS=-Xmx2g -Xms2g
+  KAFKA_HEAP_OPTS: '-Xmx2g -Xms2g'
 
 x-prod-deploy:
   &prod-deploy
@@ -25,7 +25,7 @@ services:
   kf-1:
     environment:
       << : *prod-environment
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kf-1:${KF_PORT}
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kf-1:${KF_PORT}'
     deploy:
       << : *prod-deploy
       placement:
@@ -35,7 +35,7 @@ services:
   kf-2:
     environment:
       << : *prod-environment
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kf-2:${KF_PORT}
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kf-2:${KF_PORT}'
     deploy:
       << : *prod-deploy
       placement:
@@ -45,7 +45,7 @@ services:
   kf-3:
     environment:
       << : *prod-environment
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kf-3:${KF_PORT}
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kf-3:${KF_PORT}'
     deploy:
       << : *prod-deploy
       placement:

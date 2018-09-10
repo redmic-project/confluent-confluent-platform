@@ -2,7 +2,7 @@ version: '3.5'
 
 x-prod-environment:
   &prod-environment
-  - ZOOKEEPER_HEAP_OPTS=-Xmx512m -Xms512m
+  ZOOKEEPER_HEAP_OPTS: '-Xmx512m -Xms512m'
 
 x-prod-deploy:
   &prod-deploy

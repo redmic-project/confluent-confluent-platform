@@ -2,7 +2,7 @@ version: '3.5'
 
 x-dev-environment:
   &dev-environment
-  - KAFKA_HEAP_OPTS=-Xmx512m -Xms512m
+  KAFKA_HEAP_OPTS: '-Xmx512m -Xms512m'
 
 x-dev-deploy:
   &dev-deploy
@@ -22,7 +22,7 @@ services:
   kf-1:
     environment:
       << : *dev-environment
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${PUBLIC_HOSTNAME}:1${KF_PORT}
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://${PUBLIC_HOSTNAME}:1${KF_PORT}'
     ports:
       - target: ${KF_PORT}
         published: 1${KF_PORT}
@@ -32,7 +32,7 @@ services:
   kf-2:
     environment:
       << : *dev-environment
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${PUBLIC_HOSTNAME}:2${KF_PORT}
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://${PUBLIC_HOSTNAME}:2${KF_PORT}'
     ports:
       - target: ${KF_PORT}
         published: 2${KF_PORT}
@@ -42,7 +42,7 @@ services:
   kf-3:
     environment:
       << : *dev-environment
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${PUBLIC_HOSTNAME}:3${KF_PORT}
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://${PUBLIC_HOSTNAME}:3${KF_PORT}'
     ports:
       - target: ${KF_PORT}
         published: 3${KF_PORT}
