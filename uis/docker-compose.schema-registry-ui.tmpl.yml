@@ -6,6 +6,7 @@ services:
     hostname: schema-registry-ui
     networks:
       - kafka-net
+      - traefik-net
     environment:
       SCHEMAREGISTRY_URL: http://schema-registry:${SR_PORT}
       PROXY: 'true'
@@ -20,4 +21,6 @@ services:
 
 networks:
   kafka-net:
+    external: true
+  traefik-net:
     external: true

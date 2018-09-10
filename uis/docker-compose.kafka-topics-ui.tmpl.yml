@@ -6,6 +6,7 @@ services:
     hostname: kafka-topics-ui
     networks:
       - kafka-net
+      - traefik-net
     environment:
       KAFKA_REST_PROXY_URL: http://kafka-rest:${KR_PORT}
       PROXY: 'true'
@@ -20,4 +21,6 @@ services:
 
 networks:
   kafka-net:
+    external: true
+  traefik-net:
     external: true

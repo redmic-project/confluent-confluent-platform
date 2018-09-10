@@ -6,6 +6,7 @@ services:
     hostname: kafka-manager
     networks:
       - kafka-net
+      - traefik-net
     environment:
       ZK_HOSTS: zk-1:${ZK_PORT},zk-2:${ZK_PORT},zk-3:${ZK_PORT}
       KM_ARGS: '-Djava.net.preferIPv4Stack=true'
@@ -18,4 +19,6 @@ services:
 
 networks:
   kafka-net:
+    external: true
+  traefik-net:
     external: true

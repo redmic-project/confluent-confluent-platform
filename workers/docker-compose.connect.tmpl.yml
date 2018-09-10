@@ -4,9 +4,6 @@ services:
   connect:
     image: confluentinc/cp-kafka-connect:${IMAGE_TAG:-latest}
     hostname: connect
-    networks:
-      - kafka-net
-      - postgres-net
     environment:
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
@@ -29,6 +26,9 @@ services:
       CONNECT_INTERNAL_KEY_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
       CONNECT_INTERNAL_VALUE_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
       CONNECT_PLUGIN_PATH: /usr/share/java
+    networks:
+      - kafka-net
+      - postgres-net
     healthcheck:
       test: curl -X GET http://localhost:${CN_PORT}/connectors
       interval: 30s

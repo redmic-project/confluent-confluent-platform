@@ -2,6 +2,8 @@ version: '3.5'
 
 services:
   connect:
+    environment:
+      KAFKA_HEAP_OPTS: '-Xmx512m -Xms256m'
     deploy:
       mode: replicated
       replicas: 1
@@ -9,7 +11,11 @@ services:
         constraints:
           - node.role == worker
       restart_policy:
-        condition: on-failure
-        max_attempts: 3
-    environment:
-      CONNECT_HEAP_OPTS: '-Xmx1g -Xms1g'
+        delay: 30s
+        window: 2m
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          memory: 820M
