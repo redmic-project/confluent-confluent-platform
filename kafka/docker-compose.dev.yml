@@ -14,9 +14,9 @@ x-dev-deploy:
   resources:
     limits:
       cpus: '1'
-      memory: 3G
+      memory: 2G
     reservations:
-      memory: 2458M
+      memory: 1639M
 
 services:
   kf-1:
