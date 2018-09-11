@@ -20,7 +20,6 @@ x-tmpl-healthcheck:
 services:
   zk-1:
     image: confluentinc/cp-zookeeper:${IMAGE_TAG:-latest}
-    hostname: zk-1
     environment:
       << : *tmpl-environment
       ZOOKEEPER_SERVER_ID: 1
@@ -35,7 +34,6 @@ services:
 
   zk-2:
     image: confluentinc/cp-zookeeper:${IMAGE_TAG:-latest}
-    hostname: zk-2
     environment:
       << : *tmpl-environment
       ZOOKEEPER_SERVER_ID: 2
@@ -50,7 +48,6 @@ services:
 
   zk-3:
     image: confluentinc/cp-zookeeper:${IMAGE_TAG:-latest}
-    hostname: zk-3
     environment:
       << : *tmpl-environment
       ZOOKEEPER_SERVER_ID: 3

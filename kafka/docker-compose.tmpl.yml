@@ -25,7 +25,6 @@ x-tmpl-healthcheck:
 services:
   kf-1:
     image: confluentinc/cp-kafka:${IMAGE_TAG:-latest}
-    hostname: kf-1
     environment:
       << : *tmpl-environment
       KAFKA_BROKER_ID: 1
@@ -40,7 +39,6 @@ services:
 
   kf-2:
     image: confluentinc/cp-kafka:${IMAGE_TAG:-latest}
-    hostname: kf-2
     environment:
       << : *tmpl-environment
       KAFKA_BROKER_ID: 2
@@ -55,7 +53,6 @@ services:
 
   kf-3:
     image: confluentinc/cp-kafka:${IMAGE_TAG:-latest}
-    hostname: kf-3
     environment:
       << : *tmpl-environment
       KAFKA_BROKER_ID: 3
