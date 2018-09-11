@@ -14,9 +14,9 @@ x-dev-deploy:
   resources:
     limits:
       cpus: '1'
-      memory: 1G
+      memory: 3G
     reservations:
-      memory: 820M
+      memory: 2458M
 
 services:
   kf-1:
@@ -26,6 +26,9 @@ services:
     ports:
       - target: ${KF_PORT}
         published: 1${KF_PORT}
+        mode: host
+      - target: 9997
+        published: 9997
         mode: host
     deploy: *dev-deploy
 
@@ -37,6 +40,9 @@ services:
       - target: ${KF_PORT}
         published: 2${KF_PORT}
         mode: host
+      - target: 9998
+        published: 9998
+        mode: host
     deploy: *dev-deploy
 
   kf-3:
@@ -46,6 +52,9 @@ services:
     ports:
       - target: ${KF_PORT}
         published: 3${KF_PORT}
+        mode: host
+      - target: 9999
+        published: 9999
         mode: host
     deploy: *dev-deploy
 
