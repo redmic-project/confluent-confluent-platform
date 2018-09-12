@@ -27,8 +27,10 @@ services:
       CONNECT_INTERNAL_VALUE_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
       CONNECT_PLUGIN_PATH: /usr/share/java
     networks:
-      - kafka-net
-      - postgres-net
+      kafka-net:
+        aliases:
+          - connect
+      postgres-net:
     healthcheck:
       test: curl -X GET http://localhost:${CN_PORT}/connectors
       interval: 30s
