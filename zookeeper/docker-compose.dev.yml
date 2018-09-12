@@ -21,14 +21,20 @@ x-dev-deploy:
 services:
   zk-1:
     environment: *dev-environment
+    networks:
+      - host-net
     deploy: *dev-deploy
 
   zk-2:
     environment: *dev-environment
+    networks:
+      - host-net
     deploy: *dev-deploy
 
   zk-3:
     environment: *dev-environment
+    networks:
+      - host-net
     deploy: *dev-deploy
 
 volumes:
@@ -58,3 +64,8 @@ volumes:
 
   zk-3-secrets-vol:
     name: zk-3-secrets-vol
+
+networks:
+  host-net:
+    external: true
+    name: host

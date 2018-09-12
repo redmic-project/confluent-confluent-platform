@@ -2,6 +2,8 @@ version: '3.5'
 
 services:
   schema-registry-ui:
+    networks:
+      - host-net
     ports:
       - target: ${UI_PORT}
         published: 18000
@@ -27,3 +29,8 @@ services:
           memory: 64M
         reservations:
           memory: 52M
+
+networks:
+  host-net:
+    external: true
+    name: host

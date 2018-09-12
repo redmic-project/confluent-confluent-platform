@@ -4,6 +4,8 @@ services:
   schema-registry:
     environment:
       - SCHEMA_REGISTRY_HEAP_OPTS=-Xmx256m
+    networks:
+      - host-net
     ports:
       - target: ${SR_PORT}
         published: 1${SR_PORT}
@@ -20,3 +22,8 @@ services:
           memory: 512M
         reservations:
           memory: 410M
+
+networks:
+  host-net:
+    external: true
+    name: host

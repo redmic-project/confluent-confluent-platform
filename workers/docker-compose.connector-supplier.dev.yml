@@ -2,6 +2,8 @@ version: '3.5'
 
 services:
   connector-supplier:
+    networks:
+      - host-net
     deploy:
       mode: replicated
       replicas: 1
@@ -15,3 +17,8 @@ services:
           memory: 64M
         reservations:
           memory: 52M
+
+networks:
+  host-net:
+    external: true
+    name: host
