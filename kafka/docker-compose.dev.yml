@@ -23,8 +23,6 @@ services:
     environment:
       << : *dev-environment
       KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://${PUBLIC_HOSTNAME}:1${KF_PORT}'
-    networks:
-      - host-net
     ports:
       - target: ${KF_PORT}
         published: 1${KF_PORT}
@@ -38,8 +36,6 @@ services:
     environment:
       << : *dev-environment
       KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://${PUBLIC_HOSTNAME}:2${KF_PORT}'
-    networks:
-      - host-net
     ports:
       - target: ${KF_PORT}
         published: 2${KF_PORT}
@@ -53,8 +49,6 @@ services:
     environment:
       << : *dev-environment
       KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://${PUBLIC_HOSTNAME}:3${KF_PORT}'
-    networks:
-      - host-net
     ports:
       - target: ${KF_PORT}
         published: 3${KF_PORT}
@@ -82,8 +76,3 @@ volumes:
 
   kf-3-secrets-vol:
     name: kf-3-secrets-vol
-
-networks:
-  host-net:
-    external: true
-    name: host

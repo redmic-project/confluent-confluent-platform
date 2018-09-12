@@ -4,8 +4,6 @@ services:
   connect:
     environment:
       KAFKA_HEAP_OPTS: '-Xmx512m -Xms256m'
-    networks:
-      - host-net
     ports:
       - target: ${CN_PORT}
         published: 1${CN_PORT}
@@ -22,8 +20,3 @@ services:
           memory: 1G
         reservations:
           memory: 820M
-
-networks:
-  host-net:
-    external: true
-    name: host

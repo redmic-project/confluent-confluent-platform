@@ -4,8 +4,6 @@ services:
   kafka-rest:
     environment:
       KAFKAREST_HEAP_OPTS: '-Xmx128m'
-    networks:
-      - host-net
     ports:
       - target: ${KR_PORT}
         published: 1${KR_PORT}
@@ -22,8 +20,3 @@ services:
           memory: 256M
         reservations:
           memory: 205M
-
-networks:
-  host-net:
-    external: true
-    name: host

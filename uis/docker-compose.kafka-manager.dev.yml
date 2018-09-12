@@ -2,8 +2,6 @@ version: '3.5'
 
 services:
   kafka-manager:
-    networks:
-      - host-net
     ports:
       - target: ${KM_PORT}
         published: 18003
@@ -29,8 +27,3 @@ services:
           memory: 512M
         reservations:
           memory: 410M
-
-networks:
-  host-net:
-    external: true
-    name: host
