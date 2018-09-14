@@ -2,7 +2,28 @@ version: '3.5'
 
 services:
   kafka-manager:
-    container_name: kafka-manager
-    restart: on-failure:3
     ports:
-      - '18003:${KM_PORT}'
+      - target: ${KM_PORT}
+        published: 18003
+        mode: host
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        traefik.port: "${KM_PORT}"
+        traefik.docker.network: traefik-net
+        traefik.frontend.auth.basic: ${UI_AUTH}
+        traefik.frontend.rule: Host:kafkamanager.${PUBLIC_HOSTNAME}
+        traefik.backend: kafka-manager
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        delay: 30s
+        window: 2m
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          memory: 410M

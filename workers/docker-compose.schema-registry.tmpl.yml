@@ -5,7 +5,9 @@ services:
     image: confluentinc/cp-schema-registry:${IMAGE_TAG:-latest}
     hostname: schema-registry
     networks:
-      - kafka-net
+      kafka-net:
+        aliases:
+          - schema-registry
     environment:
       - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zk-1:${ZK_PORT},zk-2:${ZK_PORT},zk-3:${ZK_PORT}
       - SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:${SR_PORT}

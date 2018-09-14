@@ -1,40 +1,78 @@
 version: '3.5'
 
+x-dev-environment:
+  &dev-environment
+  KAFKA_HEAP_OPTS: '-Xmx512m -Xms512m'
+
+x-dev-deploy:
+  &dev-deploy
+  mode: replicated
+  replicas: 1
+  restart_policy:
+    delay: 30s
+    window: 2m
+  resources:
+    limits:
+      cpus: '1'
+      memory: 2G
+    reservations:
+      memory: 1639M
+
 services:
   kf-1:
-    container_name: kf-1
-    restart: on-failure:3
-    ports:
-      - '1${KF_PORT}:${KF_PORT}'
-      - '9997:9997'
     environment:
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${PUBLIC_HOSTNAME}:1${KF_PORT}
-      - KAFKA_HEAP_OPTS=-Xmx256m -Xms256m
+      << : *dev-environment
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://${PUBLIC_HOSTNAME}:1${KF_PORT}'
+    ports:
+      - target: ${KF_PORT}
+        published: 1${KF_PORT}
+        mode: host
+      - target: 9997
+        published: 9997
+        mode: host
+    deploy: *dev-deploy
 
   kf-2:
-    container_name: kf-2
-    restart: on-failure:3
-    ports:
-      - '2${KF_PORT}:${KF_PORT}'
-      - '9998:9998'
     environment:
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${PUBLIC_HOSTNAME}:2${KF_PORT}
-      - KAFKA_HEAP_OPTS=-Xmx256m -Xms256m
+      << : *dev-environment
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://${PUBLIC_HOSTNAME}:2${KF_PORT}'
+    ports:
+      - target: ${KF_PORT}
+        published: 2${KF_PORT}
+        mode: host
+      - target: 9998
+        published: 9998
+        mode: host
+    deploy: *dev-deploy
 
   kf-3:
-    container_name: kf-3
-    restart: on-failure:3
-    ports:
-      - '3${KF_PORT}:${KF_PORT}'
-      - '9999:9999'
     environment:
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${PUBLIC_HOSTNAME}:3${KF_PORT}
-      - KAFKA_HEAP_OPTS=-Xmx256m -Xms256m
+      << : *dev-environment
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://${PUBLIC_HOSTNAME}:3${KF_PORT}'
+    ports:
+      - target: ${KF_PORT}
+        published: 3${KF_PORT}
+        mode: host
+      - target: 9999
+        published: 9999
+        mode: host
+    deploy: *dev-deploy
 
 volumes:
   kf-1-data-vol:
     name: kf-1-data-vol
+
+  kf-1-secrets-vol:
+    name: kf-1-secrets-vol
+
   kf-2-data-vol:
     name: kf-2-data-vol
+
+  kf-2-secrets-vol:
+    name: kf-2-secrets-vol
+
   kf-3-data-vol:
     name: kf-3-data-vol
+
+  kf-3-secrets-vol:
+    name: kf-3-secrets-vol

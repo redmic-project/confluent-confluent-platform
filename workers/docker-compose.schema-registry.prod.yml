@@ -3,7 +3,7 @@ version: '3.5'
 services:
   schema-registry:
     environment:
-      - SCHEMA_REGISTRY_HEAP_OPTS=-Xmx1g -Xms1g
+      - SCHEMA_REGISTRY_HEAP_OPTS=-Xmx512m
     deploy:
       mode: replicated
       replicas: 1
@@ -11,6 +11,11 @@ services:
         constraints:
           - node.role == worker
       restart_policy:
-        condition: on-failure
-        delay: 1m
-        window: 3m
+        delay: 30s
+        window: 2m
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+        reservations:
+          memory: 820M

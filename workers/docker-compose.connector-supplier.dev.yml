@@ -2,5 +2,16 @@ version: '3.5'
 
 services:
   connector-supplier:
-    container_name: connector-supplier
-    restart: on-failure:3
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        window: 2m
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 64M
+        reservations:
+          memory: 52M

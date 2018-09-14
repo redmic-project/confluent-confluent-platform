@@ -2,7 +2,28 @@ version: '3.5'
 
 services:
   kafka-connect-ui:
-    container_name: kafka-connect-ui
-    restart: on-failure:3
     ports:
-      - '18002:${UI_PORT}'
+      - target: ${UI_PORT}
+        published: 18002
+        mode: host
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        traefik.port: "${UI_PORT}"
+        traefik.docker.network: traefik-net
+        traefik.frontend.auth.basic: ${UI_AUTH}
+        traefik.frontend.rule: Host:kafkaconnectui.${PUBLIC_HOSTNAME}
+        traefik.backend: kafka-connect-ui
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        delay: 30s
+        window: 2m
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 64M
+        reservations:
+          memory: 52M

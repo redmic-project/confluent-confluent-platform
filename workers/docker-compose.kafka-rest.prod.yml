@@ -3,7 +3,7 @@ version: '3.5'
 services:
   kafka-rest:
     environment:
-      KAFKA_REST_HEAP_OPTS: '-Xmx1g -Xms1g'
+      KAFKAREST_HEAP_OPTS: '-Xmx128m'
     deploy:
       mode: replicated
       replicas: 1
@@ -11,6 +11,11 @@ services:
         constraints:
           - node.role == worker
       restart_policy:
-        condition: on-failure
-        delay: 1m
-        window: 3m
+        delay: 30s
+        window: 2m
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          memory: 205M

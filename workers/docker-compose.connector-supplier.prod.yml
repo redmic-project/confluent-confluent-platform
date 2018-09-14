@@ -10,5 +10,11 @@ services:
           - node.role == worker
       restart_policy:
         condition: on-failure
-        delay: 1m
-        window: 3m
+        delay: 30s
+        window: 2m
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 64M
+        reservations:
+          memory: 52M

@@ -5,7 +5,9 @@ services:
     image: confluentinc/cp-kafka-rest:${IMAGE_TAG:-latest}
     hostname: kafka-rest
     networks:
-      - kafka-net
+      kafka-net:
+        aliases:
+          - kafka-rest
     environment:
       KAFKA_REST_ZOOKEEPER_CONNECT: zk-1:${ZK_PORT},zk-2:${ZK_PORT},zk-3:${ZK_PORT}
       KAFKA_REST_BOOTSTRAP_SERVERS: kf-1:${KF_PORT},kf-2:${KF_PORT},kf-3:${KF_PORT}

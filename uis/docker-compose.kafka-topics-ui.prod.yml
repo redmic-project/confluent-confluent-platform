@@ -2,8 +2,6 @@ version: '3.5'
 
 services:
   kafka-topics-ui:
-    networks:
-      - traefik-net
     deploy:
       mode: replicated
       replicas: 1
@@ -15,12 +13,13 @@ services:
         traefik.backend: kafka-topics-ui
       placement:
         constraints:
-          - node.role == worker
+          - node.role == manager
       restart_policy:
-        condition: on-failure
-        delay: 1m
-        window: 3m
-
-networks:
-  traefik-net:
-    external: true
+        delay: 30s
+        window: 2m
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 64M
+        reservations:
+          memory: 52M
