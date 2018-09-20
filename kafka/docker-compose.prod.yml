@@ -2,6 +2,7 @@ version: '3.5'
 
 x-prod-environment:
   &prod-environment
+  KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://:${KF_PORT}'
   KAFKA_LISTENERS: 'PLAINTEXT://:${KF_PORT}'
   KAFKA_HEAP_OPTS: '-Xmx2g -Xms2g'
 
