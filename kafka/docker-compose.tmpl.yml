@@ -29,12 +29,9 @@ services:
     environment:
       << : *tmpl-environment
       KAFKA_BROKER_ID: 1
-      KAFKA_LISTENERS: 'PLAINTEXT://kf-1:${KF_PORT}'
       KAFKA_JMX_PORT: 9997
     networks:
-      kafka-net:
-        aliases:
-          - kf-1
+      - kafka-net
     volumes:
       - kf-1-data-vol:/var/lib/kafka/data
       - kf-1-secrets-vol:/etc/kafka/secrets
@@ -46,12 +43,9 @@ services:
     environment:
       << : *tmpl-environment
       KAFKA_BROKER_ID: 2
-      KAFKA_LISTENERS: 'PLAINTEXT://kf-2:${KF_PORT}'
       KAFKA_JMX_PORT: 9998
     networks:
-      kafka-net:
-        aliases:
-          - kf-2
+      - kafka-net
     volumes:
       - kf-2-data-vol:/var/lib/kafka/data
       - kf-2-secrets-vol:/etc/kafka/secrets
@@ -63,12 +57,9 @@ services:
     environment:
       << : *tmpl-environment
       KAFKA_BROKER_ID: 3
-      KAFKA_LISTENERS: 'PLAINTEXT://kf-3:${KF_PORT}'
       KAFKA_JMX_PORT: 9999
     networks:
-      kafka-net:
-        aliases:
-          - kf-3
+      - kafka-net
     volumes:
       - kf-3-data-vol:/var/lib/kafka/data
       - kf-3-secrets-vol:/etc/kafka/secrets

@@ -2,6 +2,9 @@ version: '3.5'
 
 x-dev-environment:
   &dev-environment
+  KAFKA_LISTENERS: 'PLAINTEXT://:${KF_PORT},EXT://0.0.0.0:${KF_PORT_EXT}'
+  KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,EXT:PLAINTEXT
+  KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
   KAFKA_HEAP_OPTS: '-Xmx512m -Xms512m'
 
 x-dev-deploy:
@@ -22,9 +25,9 @@ services:
   kf-1:
     environment:
       << : *dev-environment
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://${PUBLIC_HOSTNAME}:1${KF_PORT}'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://:${KF_PORT},EXT://${PUBLIC_HOSTNAME}:1${KF_PORT}'
     ports:
-      - target: ${KF_PORT}
+      - target: ${KF_PORT_EXT}
         published: 1${KF_PORT}
         mode: host
       - target: 9997
@@ -35,9 +38,9 @@ services:
   kf-2:
     environment:
       << : *dev-environment
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://${PUBLIC_HOSTNAME}:2${KF_PORT}'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://:${KF_PORT},EXT://${PUBLIC_HOSTNAME}:2${KF_PORT}'
     ports:
-      - target: ${KF_PORT}
+      - target: ${KF_PORT_EXT}
         published: 2${KF_PORT}
         mode: host
       - target: 9998
@@ -48,9 +51,9 @@ services:
   kf-3:
     environment:
       << : *dev-environment
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://${PUBLIC_HOSTNAME}:3${KF_PORT}'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://:${KF_PORT},EXT://${PUBLIC_HOSTNAME}:3${KF_PORT}'
     ports:
-      - target: ${KF_PORT}
+      - target: ${KF_PORT_EXT}
         published: 3${KF_PORT}
         mode: host
       - target: 9999
