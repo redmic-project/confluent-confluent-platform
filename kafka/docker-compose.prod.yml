@@ -2,6 +2,7 @@ version: '3.5'
 
 x-prod-environment:
   &prod-environment
+  KAFKA_LISTENERS: 'PLAINTEXT://:${KF_PORT}'
   KAFKA_HEAP_OPTS: '-Xmx2g -Xms2g'
 
 x-prod-deploy:
@@ -23,9 +24,7 @@ x-prod-deploy:
 
 services:
   kf-1:
-    environment:
-      << : *prod-environment
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kf-1:${KF_PORT}'
+    environment: *prod-environment
     deploy:
       << : *prod-deploy
       placement:
@@ -33,9 +32,7 @@ services:
           - engine.labels.availability_zone == ${AWS_REGION}a
 
   kf-2:
-    environment:
-      << : *prod-environment
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kf-2:${KF_PORT}'
+    environment: *prod-environment
     deploy:
       << : *prod-deploy
       placement:
@@ -43,9 +40,7 @@ services:
           - engine.labels.availability_zone == ${AWS_REGION}b
 
   kf-3:
-    environment:
-      << : *prod-environment
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kf-3:${KF_PORT}'
+    environment: *prod-environment
     deploy:
       << : *prod-deploy
       placement:
