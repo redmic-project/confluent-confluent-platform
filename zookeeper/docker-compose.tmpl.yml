@@ -26,9 +26,7 @@ services:
       ZOOKEEPER_SERVER_ID: 1
       KAFKA_JMX_PORT: 9990
     networks:
-      kafka-net:
-        aliases:
-          - zk-1
+      - kafka-net
     volumes:
       - zk-1-data-vol:/var/lib/zookeeper/data
       - zk-1-log-vol:/var/lib/zookeeper/log
@@ -43,9 +41,7 @@ services:
       ZOOKEEPER_SERVER_ID: 2
       KAFKA_JMX_PORT: 9991
     networks:
-      kafka-net:
-        aliases:
-          - zk-2
+      - kafka-net
     volumes:
       - zk-2-data-vol:/var/lib/zookeeper/data
       - zk-2-log-vol:/var/lib/zookeeper/log
@@ -60,9 +56,7 @@ services:
       ZOOKEEPER_SERVER_ID: 3
       KAFKA_JMX_PORT: 9992
     networks:
-      kafka-net:
-        aliases:
-          - zk-2
+      - kafka-net
     volumes:
       - zk-3-data-vol:/var/lib/zookeeper/data
       - zk-3-log-vol:/var/lib/zookeeper/log
