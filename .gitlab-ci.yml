@@ -291,7 +291,7 @@ deploy-kafka-manager-dev:
     SERVICES_TO_CHECK: confluent_kafka-manager
     COMPOSE_FILE: docker-compose.kafka-manager.tmpl.yml:docker-compose.kafka-manager.dev.yml
     PUBLIC_HOSTNAME: ${DEV_PUBLIC_HOSTNAME}
-    UI_AUTH: ${UI_AUTH}
+    UI_AUTH: ${DEV_UI_AUTH}
   script:
     - >
       deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME}
@@ -314,7 +314,7 @@ deploy-kafka-manager-pro:
     SERVICES_TO_CHECK: confluent_kafka-manager
     COMPOSE_FILE: docker-compose.kafka-manager.tmpl.yml:docker-compose.kafka-manager.prod.yml
     PUBLIC_HOSTNAME: ${PRO_PUBLIC_HOSTNAME}
-    UI_AUTH: ${UI_AUTH}
+    UI_AUTH: ${PRO_UI_AUTH}
   script:
     - >
       deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME}
@@ -335,7 +335,7 @@ deploy-kafka-topics-ui-dev:
     SERVICES_TO_CHECK: confluent_kafka-topics-ui
     COMPOSE_FILE: docker-compose.kafka-topics-ui.tmpl.yml:docker-compose.kafka-topics-ui.dev.yml
     PUBLIC_HOSTNAME: ${DEV_PUBLIC_HOSTNAME}
-    UI_AUTH: ${UI_AUTH}
+    UI_AUTH: ${DEV_UI_AUTH}
   script:
     - >
       deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME}
@@ -358,7 +358,7 @@ deploy-kafka-topics-ui-pro:
     SERVICES_TO_CHECK: confluent_kafka-topics-ui
     COMPOSE_FILE: docker-compose.kafka-topics-ui.tmpl.yml:docker-compose.kafka-topics-ui.prod.yml
     PUBLIC_HOSTNAME: ${PRO_PUBLIC_HOSTNAME}
-    UI_AUTH: ${UI_AUTH}
+    UI_AUTH: ${PRO_UI_AUTH}
   script:
     - >
       deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME}
@@ -379,7 +379,7 @@ deploy-kafka-connect-ui-dev:
     SERVICES_TO_CHECK: confluent_kafka-connect-ui
     COMPOSE_FILE: docker-compose.kafka-connect-ui.tmpl.yml:docker-compose.kafka-connect-ui.dev.yml
     PUBLIC_HOSTNAME: ${DEV_PUBLIC_HOSTNAME}
-    UI_AUTH: ${UI_AUTH}
+    UI_AUTH: ${DEV_UI_AUTH}
   script:
     - >
       deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME}
@@ -402,7 +402,7 @@ deploy-kafka-connect-ui-pro:
     SERVICES_TO_CHECK: confluent_kafka-connect-ui
     COMPOSE_FILE: docker-compose.kafka-connect-ui.tmpl.yml:docker-compose.kafka-connect-ui.prod.yml
     PUBLIC_HOSTNAME: ${PRO_PUBLIC_HOSTNAME}
-    UI_AUTH: ${UI_AUTH}
+    UI_AUTH: ${PRO_UI_AUTH}
   script:
     - >
       deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME}
@@ -423,7 +423,7 @@ deploy-schema-registry-ui-dev:
     SERVICES_TO_CHECK: confluent_schema-registry-ui
     COMPOSE_FILE: docker-compose.schema-registry-ui.tmpl.yml:docker-compose.schema-registry-ui.dev.yml
     PUBLIC_HOSTNAME: ${DEV_PUBLIC_HOSTNAME}
-    UI_AUTH: ${UI_AUTH}
+    UI_AUTH: ${DEV_UI_AUTH}
   script:
     - >
       deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME}
@@ -446,7 +446,7 @@ deploy-schema-registry-ui-pro:
     SERVICES_TO_CHECK: confluent_schema-registry-ui
     COMPOSE_FILE: docker-compose.schema-registry-ui.tmpl.yml:docker-compose.schema-registry-ui.prod.yml
     PUBLIC_HOSTNAME: ${PRO_PUBLIC_HOSTNAME}
-    UI_AUTH: ${UI_AUTH}
+    UI_AUTH: ${PRO_UI_AUTH}
   script:
     - >
       deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME}
