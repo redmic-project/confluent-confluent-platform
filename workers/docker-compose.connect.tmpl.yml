@@ -31,6 +31,8 @@ services:
         aliases:
           - connect
       postgres-net:
+    volumes:
+      - secrets-vol:/etc/kafka/secrets
     healthcheck:
       test: curl -X GET http://localhost:${CN_PORT}/connectors
       interval: 30s
