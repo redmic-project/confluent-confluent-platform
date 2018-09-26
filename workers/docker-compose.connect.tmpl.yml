@@ -32,7 +32,10 @@ services:
           - connect
       postgres-net:
     volumes:
-      - secrets-vol:/etc/kafka/secrets
+      - kafka-secrets-vol:/etc/kafka/secrets
+      - connect-secrets-vol:/etc/kafka-connect/secrets
+      - jars-vol:/etc/kafka-connect/jars
+      - data-vol:/var/lib/kafka/data
     healthcheck:
       test: curl -X GET http://localhost:${CN_PORT}/connectors
       interval: 30s

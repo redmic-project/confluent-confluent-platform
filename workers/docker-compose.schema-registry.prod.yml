@@ -19,3 +19,7 @@ services:
           memory: 1G
         reservations:
           memory: 820M
+
+volumes:
+  secrets-vol:
+    name: schema-registry-secrets-vol

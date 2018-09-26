@@ -21,5 +21,11 @@ services:
           memory: 820M
 
 volumes:
-  secrets-vol:
-    name: connect-secrets-vol
+  kafka-secrets-vol:
+    name: connect-kafka-secrets-vol
+  connect-secrets-vol:
+    name: connect-connect-secrets-vol
+  jars-vol:
+    name: connect-jars-vol
+  data-vol:
+    name: connect-data-vol
