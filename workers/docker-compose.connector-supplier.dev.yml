@@ -15,3 +15,7 @@ services:
           memory: 64M
         reservations:
           memory: 52M
+
+volumes:
+  vol:
+    name: connector-supplier-vol

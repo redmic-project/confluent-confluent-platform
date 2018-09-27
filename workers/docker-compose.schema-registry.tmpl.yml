@@ -4,10 +4,6 @@ services:
   schema-registry:
     image: confluentinc/cp-schema-registry:${IMAGE_TAG:-latest}
     hostname: schema-registry
-    networks:
-      kafka-net:
-        aliases:
-          - schema-registry
     environment:
       - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zk-1:${ZK_PORT},zk-2:${ZK_PORT},zk-3:${ZK_PORT}
       - SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:${SR_PORT}
@@ -16,6 +12,12 @@ services:
       - SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_METHODS=GET,POST,PUT,DELETE,OPTIONS
       - SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_ORIGIN='*'
       - SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL=backward_transitive
+    networks:
+      kafka-net:
+        aliases:
+          - schema-registry
+    volumes:
+      - secrets-vol:/etc/schema-registry/secrets
     healthcheck:
       test: curl -X GET http://localhost:${SR_PORT}/subjects
       interval: 30s
