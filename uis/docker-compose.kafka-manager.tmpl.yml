@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   kafka-manager:
-    image: redmic/kafka-manager:${IMAGE_TAG:-latest}
+    image: giabar/gb-kafkamanager:${IMAGE_TAG:-latest}
     hostname: kafka-manager
     networks:
       - kafka-net
