@@ -19,7 +19,7 @@ services:
         window: 2m
       resources:
         limits:
-          cpus: '0.5'
-          memory: 512M
+          cpus: '1'
+          memory: 1G
         reservations:
-          memory: 410M
+          memory: 820M
