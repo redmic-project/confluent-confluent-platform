@@ -30,9 +30,6 @@ services:
       - target: ${KF_PORT_EXT}
         published: 1${KF_PORT}
         mode: host
-      - target: 9997
-        published: 9997
-        mode: host
     deploy: *dev-deploy
 
   kf-2:
@@ -43,9 +40,6 @@ services:
       - target: ${KF_PORT_EXT}
         published: 2${KF_PORT}
         mode: host
-      - target: 9998
-        published: 9998
-        mode: host
     deploy: *dev-deploy
 
   kf-3:
@@ -55,9 +49,6 @@ services:
     ports:
       - target: ${KF_PORT_EXT}
         published: 3${KF_PORT}
-        mode: host
-      - target: 9999
-        published: 9999
         mode: host
     deploy: *dev-deploy
 
