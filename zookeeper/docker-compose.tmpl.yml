@@ -2,6 +2,7 @@ version: '3.5'
 
 x-tmpl-environment: &tmpl-environment
   ZOOKEEPER_CLIENT_PORT: ${ZK_PORT}
+  KAFKA_JMX_PORT: 9999
   ZOOKEEPER_TICK_TIME: 2000
   ZOOKEEPER_INIT_LIMIT: 5
   ZOOKEEPER_SYNC_LIMIT: 2
@@ -24,7 +25,6 @@ services:
     environment:
       << : *tmpl-environment
       ZOOKEEPER_SERVER_ID: 1
-      KAFKA_JMX_PORT: 9990
     networks:
       - kafka-net
     volumes:
@@ -39,7 +39,6 @@ services:
     environment:
       << : *tmpl-environment
       ZOOKEEPER_SERVER_ID: 2
-      KAFKA_JMX_PORT: 9991
     networks:
       - kafka-net
     volumes:
@@ -54,7 +53,6 @@ services:
     environment:
       << : *tmpl-environment
       ZOOKEEPER_SERVER_ID: 3
-      KAFKA_JMX_PORT: 9992
     networks:
       - kafka-net
     volumes:
