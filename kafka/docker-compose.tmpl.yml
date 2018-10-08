@@ -13,6 +13,8 @@ x-tmpl-environment:
   KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: ${KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR}
   KAFKA_DEFAULT_REPLICATION_FACTOR: ${KAFKA_DEFAULT_REPLICATION_FACTOR}
   KAFKA_MIN_INSYNC_REPLICAS: ${KAFKA_MIN_INSYNC_REPLICAS}
+  KAFKA_JMX_PORT: ${JMX_PORT}
+  KAFKA_MAX_POLL_INVERVAL_MS: ${KAFKA_MAX_POLL_INVERVAL_MS}
 
 x-tmpl-healthcheck:
   &tmpl-healthcheck
@@ -29,7 +31,7 @@ services:
     environment:
       << : *tmpl-environment
       KAFKA_BROKER_ID: 1
-      KAFKA_JMX_PORT: 9997
+      KAFKA_JMX_HOSTNAME: kf-1
     networks:
       - kafka-net
     volumes:
@@ -43,7 +45,7 @@ services:
     environment:
       << : *tmpl-environment
       KAFKA_BROKER_ID: 2
-      KAFKA_JMX_PORT: 9998
+      KAFKA_JMX_HOSTNAME: kf-2
     networks:
       - kafka-net
     volumes:
@@ -57,7 +59,7 @@ services:
     environment:
       << : *tmpl-environment
       KAFKA_BROKER_ID: 3
-      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_HOSTNAME: kf-3
     networks:
       - kafka-net
     volumes:
