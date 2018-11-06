@@ -9,7 +9,7 @@ services:
   - docker:dind
 
 variables:
-  CONFLUENT_VERSION: 4.1.2
+  CONFLUENT_VERSION: 5.0.0
   DOCKER_DRIVER: overlay2
   STACK: confluent
 
