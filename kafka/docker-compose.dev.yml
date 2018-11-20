@@ -5,7 +5,7 @@ x-dev-environment:
   KAFKA_LISTENERS: 'PLAINTEXT://:${KF_PORT},EXT://0.0.0.0:${KF_PORT_EXT}'
   KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,EXT:PLAINTEXT
   KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-  KAFKA_HEAP_OPTS: '-Xmx512m -Xms512m -javaagent:/jmx_prometheus_javaagent.jar=9998:/config.yaml'
+  KAFKA_HEAP_OPTS: '-Xmx1g -Xms1g -javaagent:/jmx_prometheus_javaagent.jar=9998:/config.yaml'
 
 x-dev-deploy:
   &dev-deploy
