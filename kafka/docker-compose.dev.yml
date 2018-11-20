@@ -5,7 +5,7 @@ x-dev-environment:
   KAFKA_LISTENERS: 'PLAINTEXT://:${KF_PORT},EXT://0.0.0.0:${KF_PORT_EXT}'
   KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,EXT:PLAINTEXT
   KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-  KAFKA_HEAP_OPTS: '-Xmx512m -Xms512m'
+  KAFKA_HEAP_OPTS: '-Xmx512m -Xms512m -javaagent:/jmx_prometheus_javaagent.jar=9998:/config.yaml'
 
 x-dev-deploy:
   &dev-deploy
@@ -30,6 +30,11 @@ services:
       - target: ${KF_PORT_EXT}
         published: 1${KF_PORT}
         mode: host
+    configs:
+      - source: jmx-prometheus-javaagent
+        target: /jmx_prometheus_javaagent.jar
+      - source: jmx-prometheus-config
+        target: /config.yaml
     deploy: *dev-deploy
 
   kf-2:
@@ -40,6 +45,11 @@ services:
       - target: ${KF_PORT_EXT}
         published: 2${KF_PORT}
         mode: host
+    configs:
+      - source: jmx-prometheus-javaagent
+        target: /jmx_prometheus_javaagent.jar
+      - source: jmx-prometheus-config
+        target: /config.yaml
     deploy: *dev-deploy
 
   kf-3:
@@ -50,6 +60,11 @@ services:
       - target: ${KF_PORT_EXT}
         published: 3${KF_PORT}
         mode: host
+    configs:
+      - source: jmx-prometheus-javaagent
+        target: /jmx_prometheus_javaagent.jar
+      - source: jmx-prometheus-config
+        target: /config.yaml
     deploy: *dev-deploy
 
 volumes:
@@ -70,3 +85,10 @@ volumes:
 
   kf-3-secrets-vol:
     name: kf-3-secrets-vol
+
+configs:
+  jmx-prometheus-javaagent:
+    file: ./config/jmx_prometheus_javaagent-0.3.1.jar
+
+  jmx-prometheus-config:
+    file: ./config/config.yaml
