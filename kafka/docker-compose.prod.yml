@@ -61,19 +61,10 @@ volumes:
     << : *prod-default-volume
     name: kf-1-data-vol
 
-  kf-1-secrets-vol:
-    name: kf-1-secrets-vol
-
   kf-2-data-vol:
     << : *prod-default-volume
     name: kf-2-data-vol
 
-  kf-2-secrets-vol:
-    name: kf-2-secrets-vol
-
   kf-3-data-vol:
     << : *prod-default-volume
     name: kf-3-data-vol
-
-  kf-3-secrets-vol:
-    name: kf-3-secrets-vol
