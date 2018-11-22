@@ -37,6 +37,7 @@ services:
       KAFKA_JMX_HOSTNAME: kf-1
     networks:
       - kafka-net
+      - metric-net
     volumes:
       - kf-1-data-vol:/var/lib/kafka/data
       - kf-1-secrets-vol:/etc/kafka/secrets
@@ -56,6 +57,7 @@ services:
       KAFKA_JMX_HOSTNAME: kf-2
     networks:
       - kafka-net
+      - metric-net
     volumes:
       - kf-2-data-vol:/var/lib/kafka/data
       - kf-2-secrets-vol:/etc/kafka/secrets
@@ -75,6 +77,7 @@ services:
       KAFKA_JMX_HOSTNAME: kf-3
     networks:
       - kafka-net
+      - metric-net
     volumes:
       - kf-3-data-vol:/var/lib/kafka/data
       - kf-3-secrets-vol:/etc/kafka/secrets
@@ -87,6 +90,9 @@ services:
 
 networks:
   kafka-net:
+    external: true
+
+  metric-net:
     external: true
 
 volumes:
