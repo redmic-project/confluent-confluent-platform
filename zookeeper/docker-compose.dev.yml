@@ -38,23 +38,14 @@ volumes:
   zk-1-log-vol:
     name: zk-1-log-vol
 
-  zk-1-secrets-vol:
-    name: zk-1-secrets-vol
-
   zk-2-data-vol:
     name: zk-2-data-vol
 
   zk-2-log-vol:
     name: zk-2-log-vol
 
-  zk-2-secrets-vol:
-    name: zk-2-secrets-vol
-
   zk-3-data-vol:
     name: zk-3-data-vol
 
   zk-3-log-vol:
     name: zk-3-log-vol
-
-  zk-3-secrets-vol:
-    name: zk-3-secrets-vol
