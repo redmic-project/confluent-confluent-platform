@@ -17,12 +17,25 @@ services:
       KAFKA_REST_ACCESS_CONTROL_ALLOW_METHODS: GET,POST,PUT,DELETE,OPTIONS
       KAFKA_REST_ACCESS_CONTROL_ALLOW_ORIGIN: '*'
       KAFKA_REST_CONSUMER_REQUEST_TIMEOUT_MS: '30000'
+      KAFKAREST_HEAP_OPTS: '-Xmx128m'
     healthcheck:
       test: curl -X GET http://localhost:${KR_PORT}/topics
       interval: 30s
       timeout: 30s
       retries: 3
       start_period: 2m
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        delay: 30s
+        window: 2m
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          memory: 205M
 
 networks:
   kafka-net:

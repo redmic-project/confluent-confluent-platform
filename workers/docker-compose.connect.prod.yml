@@ -2,30 +2,7 @@ version: '3.5'
 
 services:
   connect:
-    environment:
-      KAFKA_HEAP_OPTS: '-Xmx512m -Xms256m'
     deploy:
-      mode: replicated
-      replicas: 1
       placement:
         constraints:
           - node.role == worker
-      restart_policy:
-        delay: 30s
-        window: 2m
-      resources:
-        limits:
-          cpus: '1'
-          memory: 1G
-        reservations:
-          memory: 820M
-
-volumes:
-  kafka-secrets-vol:
-    name: connect-kafka-secrets-vol
-  connect-secrets-vol:
-    name: connect-connect-secrets-vol
-  jars-vol:
-    name: connect-jars-vol
-  data-vol:
-    name: connect-data-vol

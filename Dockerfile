@@ -1,4 +1,4 @@
-FROM ellerbrock/alpine-bash-curl-ssl
+FROM ellerbrock/alpine-bash-curl-ssl:0.3.0
 
 LABEL maintainer="info@redmic.es"
 

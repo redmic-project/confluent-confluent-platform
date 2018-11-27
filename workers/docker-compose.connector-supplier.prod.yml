@@ -3,22 +3,6 @@ version: '3.5'
 services:
   connector-supplier:
     deploy:
-      mode: replicated
-      replicas: 1
       placement:
         constraints:
           - node.role == worker
-      restart_policy:
-        condition: on-failure
-        delay: 30s
-        window: 2m
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 64M
-        reservations:
-          memory: 52M
-
-volumes:
-  vol:
-    name: connector-supplier-vol

@@ -26,6 +26,7 @@ services:
       CONNECT_INTERNAL_KEY_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
       CONNECT_INTERNAL_VALUE_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
       CONNECT_PLUGIN_PATH: /usr/share/java
+      KAFKA_HEAP_OPTS: '-Xmx512m -Xms256m'
     networks:
       kafka-net:
         aliases:
@@ -42,9 +43,32 @@ services:
       timeout: 30s
       retries: 3
       start_period: 2m
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        delay: 30s
+        window: 2m
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          memory: 820M
 
 networks:
   kafka-net:
     external: true
+
   postgres-net:
     external: true
+
+volumes:
+  kafka-secrets-vol:
+    name: connect-kafka-secrets-vol
+  connect-secrets-vol:
+    name: connect-connect-secrets-vol
+  jars-vol:
+    name: connect-jars-vol
+  data-vol:
+    name: connect-data-vol
