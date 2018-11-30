@@ -33,11 +33,6 @@ services:
       - zk-1-data-vol:/var/lib/zookeeper/data
       - zk-1-log-vol:/var/lib/zookeeper/log
       - zk-1-secrets-vol:/etc/zookeeper/secrets
-    configs:
-      - source: jmx-prometheus-javaagent
-        target: /jmx_prometheus_javaagent.jar
-      - source: jmx-prometheus-config
-        target: /config.yaml
     healthcheck: *tmpl-healthcheck
 
   zk-2:
@@ -54,11 +49,6 @@ services:
       - zk-2-data-vol:/var/lib/zookeeper/data
       - zk-2-log-vol:/var/lib/zookeeper/log
       - zk-2-secrets-vol:/etc/zookeeper/secrets
-    configs:
-      - source: jmx-prometheus-javaagent
-        target: /jmx_prometheus_javaagent.jar
-      - source: jmx-prometheus-config
-        target: /config.yaml
     healthcheck: *tmpl-healthcheck
 
   zk-3:
@@ -75,11 +65,6 @@ services:
       - zk-3-data-vol:/var/lib/zookeeper/data
       - zk-3-log-vol:/var/lib/zookeeper/log
       - zk-3-secrets-vol:/etc/zookeeper/secrets
-    configs:
-      - source: jmx-prometheus-javaagent
-        target: /jmx_prometheus_javaagent.jar
-      - source: jmx-prometheus-config
-        target: /config.yaml
     healthcheck: *tmpl-healthcheck
 
 networks:
@@ -98,10 +83,3 @@ volumes:
 
   zk-3-secrets-vol:
     name: zk-3-secrets-vol
-
-configs:
-  jmx-prometheus-javaagent:
-    file: ./config/jmx_prometheus_javaagent-0.3.1.jar
-
-  jmx-prometheus-config:
-    file: ./config/config.yaml

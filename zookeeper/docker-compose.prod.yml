@@ -2,7 +2,7 @@ version: '3.5'
 
 x-prod-environment:
   &prod-environment
-  KAFKA_HEAP_OPTS: '-Xmx256m -Xms256m -javaagent:/jmx_prometheus_javaagent.jar=${JMX_HTTP_PORT}:/config.yaml'
+  KAFKA_HEAP_OPTS: '-Xmx256m -Xms256m'
 
 x-prod-deploy:
   &prod-deploy
