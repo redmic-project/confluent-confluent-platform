@@ -2,7 +2,7 @@ version: '3.5'
 
 x-dev-environment:
   &dev-environment
-  KAFKA_HEAP_OPTS: '-Xmx128m -Xms128m'
+  KAFKA_HEAP_OPTS: '-Xmx128m -Xms128m -javaagent:/jmx_prometheus_javaagent.jar=${JMX_HTTP_PORT}:/config.yaml'
 
 x-dev-deploy:
   &dev-deploy
