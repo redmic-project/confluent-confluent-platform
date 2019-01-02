@@ -25,13 +25,14 @@ services:
       CONNECT_VALUE_CONVERTER: 'io.confluent.connect.avro.AvroConverter'
       CONNECT_INTERNAL_KEY_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
       CONNECT_INTERNAL_VALUE_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
-      CONNECT_PLUGIN_PATH: /usr/share/java
+      CONNECT_PLUGIN_PATH: /usr/share/java,/etc/kafka-connect/jars
       KAFKA_HEAP_OPTS: '-Xmx512m -Xms256m'
     networks:
       kafka-net:
         aliases:
           - connect
       postgres-net:
+      elastic6-net:
     volumes:
       - kafka-secrets-vol:/etc/kafka/secrets
       - connect-secrets-vol:/etc/kafka-connect/secrets
