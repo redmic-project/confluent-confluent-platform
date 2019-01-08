@@ -32,7 +32,7 @@ services:
         aliases:
           - connect
       postgres-net:
-      elastic6-net:
+      elastic-net:
     volumes:
       - kafka-secrets-vol:/etc/kafka/secrets
       - connect-secrets-vol:/etc/kafka-connect/secrets
@@ -59,17 +59,26 @@ services:
 
 networks:
   kafka-net:
+    name: ${KAFKA_NET_NAME:-kafka-net}
     external: true
 
   postgres-net:
+    name: ${POSTGRES_NET_NAME:-postgres-net}
+    external: true
+
+  elastic-net:
+    name: ${ELASTIC_NET_NAME:-elastic6-net}
     external: true
 
 volumes:
   kafka-secrets-vol:
     name: connect-kafka-secrets-vol
+
   connect-secrets-vol:
     name: connect-connect-secrets-vol
+
   jars-vol:
     name: connect-jars-vol
+
   data-vol:
     name: connect-data-vol
