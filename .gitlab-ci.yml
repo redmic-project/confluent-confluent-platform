@@ -9,7 +9,7 @@ services:
   - docker:dind
 
 variables:
-  CONFLUENT_VERSION: 4.1.2
+  CONFLUENT_VERSION: 5.0.1
   DOCKER_DRIVER: overlay2
   STACK: confluent
 
@@ -62,77 +62,6 @@ container-scanning:
       -w clair-whitelist.yml ${IMAGE_NAME}:${CI_COMMIT_SHA} || true
   artifacts:
     paths: [gl-sast-container-report.json]
-
-deploy-zookeeper-dev:
-  stage: deploy
-  variables:
-    DEPLOY_DIR_NAME: zookeeper
-    SSH_REMOTE: ${DEV_SSH_REMOTE}
-    SERVICES_TO_CHECK: confluent_zk-1 confluent_zk-2 confluent_zk-3
-    IMAGE_TAG: ${CONFLUENT_VERSION}
-    COMPOSE_FILE: docker-compose.tmpl.yml:docker-compose.dev.yml
-  script:
-    - create-nets.sh kafka-net
-    - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE}
-  environment:
-    name: dev/zookeeper
-  only:
-    - branches
-  except:
-    - master
-  when: manual
-
-deploy-zookeeper-pro:
-  stage: deploy
-  variables:
-    DEPLOY_DIR_NAME: zookeeper
-    SSH_REMOTE: ${PRO_SSH_REMOTE}
-    SERVICES_TO_CHECK: confluent_zk-1 confluent_zk-2 confluent_zk-3
-    IMAGE_TAG: ${CONFLUENT_VERSION}
-    COMPOSE_FILE: docker-compose.tmpl.yml:docker-compose.prod.yml
-  script:
-    - create-nets.sh kafka-net
-    - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} AWS_REGION=${AWS_REGION}
-  environment:
-    name: pro/zookeeper
-  only:
-    - master
-  when: manual
-
-deploy-kafka-dev:
-  stage: deploy
-  variables:
-    DEPLOY_DIR_NAME: kafka
-    SSH_REMOTE: ${DEV_SSH_REMOTE}
-    SERVICES_TO_CHECK: confluent_kf-1 confluent_kf-2 confluent_kf-3
-    IMAGE_TAG: ${CONFLUENT_VERSION}
-    COMPOSE_FILE: docker-compose.tmpl.yml:docker-compose.dev.yml
-    PUBLIC_HOSTNAME: ${DEV_PUBLIC_HOSTNAME}
-  script:
-    - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} PUBLIC_HOSTNAME=${PUBLIC_HOSTNAME}
-  environment:
-    name: dev/kafka
-  only:
-    - branches
-  except:
-    - master
-  when: manual
-
-deploy-kafka-pro:
-  stage: deploy
-  variables:
-    DEPLOY_DIR_NAME: kafka
-    SSH_REMOTE: ${PRO_SSH_REMOTE}
-    SERVICES_TO_CHECK: confluent_kf-1 confluent_kf-2 confluent_kf-3
-    IMAGE_TAG: ${CONFLUENT_VERSION}
-    COMPOSE_FILE: docker-compose.tmpl.yml:docker-compose.prod.yml
-  script:
-    - deploy.sh IMAGE_TAG=${IMAGE_TAG} COMPOSE_FILE=${COMPOSE_FILE} AWS_REGION=${AWS_REGION}
-  environment:
-    name: pro/kafka
-  only:
-    - master
-  when: manual
 
 deploy-connect-dev:
   stage: deploy

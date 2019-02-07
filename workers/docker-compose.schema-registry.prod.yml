@@ -5,21 +5,12 @@ services:
     environment:
       - SCHEMA_REGISTRY_HEAP_OPTS=-Xmx512m
     deploy:
-      mode: replicated
-      replicas: 1
       placement:
         constraints:
           - node.role == worker
-      restart_policy:
-        delay: 30s
-        window: 2m
       resources:
         limits:
           cpus: '0.5'
           memory: 1G
         reservations:
           memory: 820M
-
-volumes:
-  secrets-vol:
-    name: schema-registry-secrets-vol

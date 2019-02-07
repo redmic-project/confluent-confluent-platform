@@ -18,9 +18,31 @@ services:
       timeout: 10s
       retries: 3
       start_period: 2m
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        traefik.docker.network: traefik-net
+        traefik.frontend.auth.basic.users: ${UI_AUTH}
+        traefik.frontend.rule: Host:kafkatopicsui.${PUBLIC_HOSTNAME}
+        traefik.backend: kafka-topics-ui
+        traefik.port: "${UI_PORT}"
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        delay: 30s
+        window: 2m
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 64M
+        reservations:
+          memory: 52M
 
 networks:
   kafka-net:
     external: true
+
   traefik-net:
     external: true

@@ -9,18 +9,9 @@ services:
         published: 1${SR_PORT}
         mode: host
     deploy:
-      mode: replicated
-      replicas: 1
-      restart_policy:
-        delay: 30s
-        window: 2m
       resources:
         limits:
           cpus: '0.5'
           memory: 512M
         reservations:
           memory: 410M
-
-volumes:
-  secrets-vol:
-    name: schema-registry-secrets-vol
