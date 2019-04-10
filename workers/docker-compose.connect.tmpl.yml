@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   connect:
-    image: confluentinc/cp-kafka-connect:${IMAGE_TAG:-latest}
+    image: ${IMAGE_NAME:-confluentinc/cp-kafka-connect}:${IMAGE_TAG:-latest}
     hostname: connect
     environment:
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
@@ -29,8 +29,6 @@ services:
       KAFKA_HEAP_OPTS: '-Xmx512m -Xms256m'
     networks:
       kafka-net:
-        aliases:
-          - connect
       postgres-net:
       elastic-net:
     volumes:
@@ -39,11 +37,11 @@ services:
       - jars-vol:/etc/kafka-connect/jars
       - data-vol:/var/lib/kafka/data
     healthcheck:
-      test: curl -X GET http://localhost:${CN_PORT}/connectors
+      test: curl --silent http://localhost:${CN_PORT}/connectors
       interval: 30s
       timeout: 30s
-      retries: 3
-      start_period: 2m
+      retries: 10
+      start_period: 5m
     deploy:
       mode: replicated
       replicas: 1
@@ -72,13 +70,10 @@ networks:
 
 volumes:
   kafka-secrets-vol:
-    name: connect-kafka-secrets-vol
+    name: ${CONNECT_KAFKA_SECRETS_VOL_NAME:-connect-kafka-secrets-vol}
 
   connect-secrets-vol:
-    name: connect-connect-secrets-vol
-
-  jars-vol:
-    name: connect-jars-vol
+    name: ${CONNECT_SECRETS_VOL_NAME:-connect-connect-secrets-vol}
 
   data-vol:
-    name: connect-data-vol
+    name: ${CONNECT_DATA_VOL_NAME:-connect-data-vol}

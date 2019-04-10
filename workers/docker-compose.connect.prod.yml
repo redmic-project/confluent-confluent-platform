@@ -6,3 +6,10 @@ services:
       placement:
         constraints:
           - node.role == worker
+
+volumes:
+  jars-vol:
+    name: ${CONNECT_JARS_VOL_NAME:-connect-jars-vol}
+    driver: 'cloudstor:aws'
+    driver_opts:
+      backing: shared

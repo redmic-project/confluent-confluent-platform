@@ -1,1 +1,5 @@
 version: '3.5'
+
+volumes:
+  jars-vol:
+    name: ${CONNECT_JARS_VOL_NAME:-connect-jars-vol}
