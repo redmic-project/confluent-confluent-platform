@@ -26,6 +26,7 @@ services:
       CONNECT_INTERNAL_KEY_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
       CONNECT_INTERNAL_VALUE_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
       CONNECT_PLUGIN_PATH: /usr/share/java,/etc/kafka-connect/jars
+      CONNECT_LOG4J_ROOT_LOGLEVEL: ${LOG_LEVEL}
       KAFKA_HEAP_OPTS: '-Xmx512m -Xms256m'
     networks:
       kafka-net:
