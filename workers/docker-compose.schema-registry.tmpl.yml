@@ -12,10 +12,9 @@ services:
       - SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_METHODS=GET,POST,PUT,DELETE,OPTIONS
       - SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_ORIGIN='*'
       - SCHEMA_REGISTRY_AVRO_COMPATIBILITY_LEVEL=backward_transitive
+      - SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL=${LOG_LEVEL}
     networks:
       kafka-net:
-        aliases:
-          - schema-registry
     volumes:
       - secrets-vol:/etc/schema-registry/secrets
     healthcheck:
