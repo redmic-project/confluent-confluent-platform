@@ -30,7 +30,7 @@ services:
       KAFKA_HEAP_OPTS: '-Xmx512m -Xms256m'
     networks:
       kafka-net:
-      postgres-net:
+      postgres-vessel-net:
       elastic-net:
     volumes:
       - kafka-secrets-vol:/etc/kafka/secrets
@@ -61,8 +61,8 @@ networks:
     name: ${KAFKA_NET_NAME:-kafka-net}
     external: true
 
-  postgres-net:
-    name: ${POSTGRES_NET_NAME:-postgres-net}
+  postgres-vessel-net:
+    name: ${POSTGRES_VESSEL_NET_NAME:-postgres-vessel-net}
     external: true
 
   elastic-net:
