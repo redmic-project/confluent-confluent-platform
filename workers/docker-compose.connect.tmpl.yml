@@ -31,6 +31,7 @@ services:
     networks:
       kafka-net:
       postgres-vessel-net:
+      postgres-net:
       elastic-net:
     volumes:
       - kafka-secrets-vol:/etc/kafka/secrets
@@ -59,6 +60,10 @@ services:
 networks:
   kafka-net:
     name: ${KAFKA_NET_NAME:-kafka-net}
+    external: true
+
+  postgres-net:
+    name: ${POSTGRES_NET_NAME:-postgres-net}
     external: true
 
   postgres-vessel-net:
